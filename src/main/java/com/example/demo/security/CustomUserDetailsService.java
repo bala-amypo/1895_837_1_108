@@ -1,4 +1,4 @@
-package com.example.aiml.security;
+package com.example.demo.security;
 
 public class CustomUserDetailsService {
     

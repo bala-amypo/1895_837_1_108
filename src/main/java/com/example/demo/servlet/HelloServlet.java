@@ -1,4 +1,4 @@
-package com.example.aiml.servlet;
+package com.example.demo.servlet;
 
 public class HelloServlet {
     

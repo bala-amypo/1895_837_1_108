@@ -1,4 +1,4 @@
-package com.example.aiml.exception;
+package com.example.demo.exception;
 
 public class NotFoundException {
     
