@@ -1,5 +1,6 @@
 package com.example.aiml.model;
 
+@Entity
 public class PricingRule {
      private Long id;
     private String ruleCode;

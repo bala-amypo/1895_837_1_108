@@ -1,5 +1,6 @@
 package com.example.aiml.model;
 
+@Entity
 public class User {
     private Long id;
     private String fullName;

@@ -2,6 +2,7 @@ package com.example.aiml.model;
 
 import java.time.LocalDateTime;
 
+@Entity
 public class DynamicPriceRecord {
     private Long id;
     private Long eventId;

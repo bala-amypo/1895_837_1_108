@@ -3,6 +3,7 @@ package com.example.aiml.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
 public class EventRecord {
     private Long id;
     private String eventCode;
