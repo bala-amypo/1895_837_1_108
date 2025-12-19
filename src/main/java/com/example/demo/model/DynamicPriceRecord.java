@@ -1,81 +1,70 @@
 package com.example.aiml.model;
 
-import jakarta.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "event_record")
-public class EventRecord {
+public class DynamicPriceRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String eventCode;
-
-    @Column(nullable = false)
-    private String eventName;
-
-    @Column(nullable = false)
-    private String venue;
-
-    @Column(nullable = false)
-    private LocalDate eventDate;
-
-    @Column(nullable = false)
-    private Double basePrice;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private Boolean active;
+    private Long eventId;
+    private Double computedPrice;
+    private String appliedRuleCodes;
+    private LocalDateTime computedAt;
 
     @PrePersist
-    public void initTimestamp() {
-        this.createdAt = LocalDateTime.now();
+    public void computeTime() {
+        this.computedAt = LocalDateTime.now();
     }
 
-    public EventRecord() {}
+    public DynamicPriceRecord() {
+    }
 
-    public EventRecord(Long id, String eventCode, String eventName, String venue,
-                       LocalDate eventDate, Double basePrice,
-                       LocalDateTime createdAt, Boolean active) {
+    public DynamicPriceRecord(Long id, Long eventId, Double computedPrice,
+                              String appliedRuleCodes, LocalDateTime computedAt) {
+
         this.id = id;
-        this.eventCode = eventCode;
-        this.eventName = eventName;
-        this.venue = venue;
-        this.eventDate = eventDate;
-        this.basePrice = basePrice;
-        this.createdAt = createdAt;
-        this.active = active;
+        this.eventId = eventId;
+        this.computedPrice = computedPrice;
+        this.appliedRuleCodes = appliedRuleCodes;
+        this.computedAt = computedAt;
     }
 
-    // GETTER SETTERS BELOW
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getEventId() {
+        return eventId;
+    }
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
 
-    public String getEventCode() { return eventCode; }
-    public void setEventCode(String eventCode) { this.eventCode = eventCode; }
+    public Double getComputedPrice() {
+        return computedPrice;
+    }
+    public void setComputedPrice(Double computedPrice) {
+        this.computedPrice = computedPrice;
+    }
 
-    public String getEventName() { return eventName; }
-    public void setEventName(String eventName) { this.eventName = eventName; }
+    public String getAppliedRuleCodes() {
+        return appliedRuleCodes;
+    }
+    public void setAppliedRuleCodes(String appliedRuleCodes) {
+        this.appliedRuleCodes = appliedRuleCodes;
+    }
 
-    public String getVenue() { return venue; }
-    public void setVenue(String venue) { this.venue = venue; }
-
-    public LocalDate getEventDate() { return eventDate; }
-    public void setEventDate(LocalDate eventDate) { this.eventDate = eventDate; }
-
-    public Double getBasePrice() { return basePrice; }
-    public void setBasePrice(Double basePrice) { this.basePrice = basePrice; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public LocalDateTime getComputedAt() {
+        return computedAt;
+    }
+    public void setComputedAt(LocalDateTime computedAt) {
+        this.computedAt = computedAt;
+    }
 }
