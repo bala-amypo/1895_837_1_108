@@ -2,13 +2,12 @@ package com.example.aiml.model;
 
 import java.time.LocalDateTime;
 
-public class PriceAdjustmentLog {
+public class SeatInventory {
     private Long id;
     private Long eventId;
-    private Double oldPrice;
-    private Double newPrice;
-    private String reason;
-    private LocalDateTime changedAt;
+    private Integer totalSeats;
+    private Integer remainingSeats;
+    private LocalDateTime updatedAt;
     
     
     public Long getId() {
@@ -23,48 +22,33 @@ public class PriceAdjustmentLog {
     public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
-    public Double getOldPrice() {
-        return oldPrice;
+    public Integer getTotalSeats() {
+        return totalSeats;
     }
-    public void setOldPrice(Double oldPrice) {
-        this.oldPrice = oldPrice;
+    public void setTotalSeats(Integer totalSeats) {
+        this.totalSeats = totalSeats;
     }
-    public Double getNewPrice() {
-        return newPrice;
+    public Integer getRemainingSeats() {
+        return remainingSeats;
     }
-    public void setNewPrice(Double newPrice) {
-        this.newPrice = newPrice;
+    public void setRemainingSeats(Integer remainingSeats) {
+        this.remainingSeats = remainingSeats;
     }
-    public String getReason() {
-        return reason;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
-    public LocalDateTime getChangedAt() {
-        return changedAt;
-    }
-    public void setChangedAt(LocalDateTime changedAt) {
-        this.changedAt = changedAt;
-    }
-    
-    public PriceAdjustmentLog(Long id, Long eventId, Double oldPrice, Double newPrice, String reason,
-            LocalDateTime changedAt) {
+    public SeatInventory(Long id, Long eventId, Integer totalSeats, Integer remainingSeats, LocalDateTime updatedAt) {
         this.id = id;
         this.eventId = eventId;
-        this.oldPrice = oldPrice;
-        this.newPrice = newPrice;
-        this.reason = reason;
-        this.changedAt = changedAt;
+        this.totalSeats = totalSeats;
+        this.remainingSeats = remainingSeats;
+        this.updatedAt = updatedAt;
     }
-    
-    
-    public PriceAdjustmentLog() {
+    public SeatInventory() {
     }
-
-    
-    
-
     
     
 }
