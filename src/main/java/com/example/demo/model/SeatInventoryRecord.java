@@ -2,7 +2,7 @@ package com.example.aiml.model;
 
 import java.time.LocalDateTime;
 
-public class SeatInventory {
+public class SeatInventoryRecord {
     private Long id;
     private Long eventId;
     private Integer totalSeats;
@@ -40,14 +40,14 @@ public class SeatInventory {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-    public SeatInventory(Long id, Long eventId, Integer totalSeats, Integer remainingSeats, LocalDateTime updatedAt) {
+    public SeatInventoryRecord(Long id, Long eventId, Integer totalSeats, Integer remainingSeats, LocalDateTime updatedAt) {
         this.id = id;
         this.eventId = eventId;
         this.totalSeats = totalSeats;
         this.remainingSeats = remainingSeats;
         this.updatedAt = updatedAt;
     }
-    public SeatInventory() {
+    public SeatInventoryRecord() {
     }
     
     
