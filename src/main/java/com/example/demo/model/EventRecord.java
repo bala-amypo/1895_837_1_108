@@ -1,4 +1,4 @@
-package com.example.aiml.model;
+package com.example.demo.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

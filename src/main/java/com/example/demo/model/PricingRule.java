@@ -1,4 +1,4 @@
-package com.example.aiml.model;
+package com.example..model;
 
 import jakarta.persistence.*;
 
