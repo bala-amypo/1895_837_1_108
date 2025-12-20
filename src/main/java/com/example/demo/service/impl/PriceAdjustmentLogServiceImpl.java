@@ -19,4 +19,9 @@ public class PriceAdjustmentLogServiceImpl implements PriceAdjustmentLogService 
     public List<PriceAdjustmentLog> getLogs(String eventCode) {
         return repo.findByEventCode(eventCode);
     }
+
+    @Override
+    public List<PriceAdjustmentLog> getAll() {
+        return repo.findAll();
+    }
 }
