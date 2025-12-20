@@ -1,13 +1,12 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.SeatInventoryRecord;
+import com.example.demo.model.PricingRule;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 
-public interface SeatInventoryRecordRepository
-        extends JpaRepository<SeatInventoryRecord, Long> {
+public interface PricingRuleRepository extends JpaRepository<PricingRule, Long> {
 
-    // One event → many seat records
-    List<SeatInventoryRecord> findByEventId(Long eventId);
+    boolean existsByRuleCode(String code);
+
+    List<PricingRule> findByActiveTrue();
 }

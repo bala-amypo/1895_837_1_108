@@ -1,28 +1,33 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.PriceAdjustmentLog;
-import com.example.demo.repository.PriceAdjustmentLogRepository;
-import com.example.demo.service.PriceAdjustmentLogService;
+import com.example.demo.model.EventRecord;
+import com.example.demo.repository.EventRecordRepository;
+import com.example.demo.service.EventRecordService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class PriceAdjustmentLogServiceImpl implements PriceAdjustmentLogService {
+public class EventRecordServiceImpl implements EventRecordService {
 
-    private final PriceAdjustmentLogRepository repo;
+    private final EventRecordRepository repo;
 
-    public PriceAdjustmentLogServiceImpl(PriceAdjustmentLogRepository repo) {
+    public EventRecordServiceImpl(EventRecordRepository repo) {
         this.repo = repo;
     }
 
     @Override
-    public List<PriceAdjustmentLog> getLogs(String eventCode) {
-        return repo.findByEventCode(eventCode);
+    public EventRecord create(EventRecord event) {
+        return repo.save(event);
     }
 
     @Override
-    public List<PriceAdjustmentLog> getAll() {
+    public List<EventRecord> getAll() {
         return repo.findAll();
+    }
+
+    @Override
+    public EventRecord getOne(Long id) {
+        return repo.findById(id).orElse(null);
     }
 }
