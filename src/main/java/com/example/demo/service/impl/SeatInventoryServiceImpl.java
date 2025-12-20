@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.SeatInventoryRecord;
-import com.example.demo.repository.SeatInventoryRepository;
+import com.example.demo.repository.SeatInventoryRecordRepository;
 import com.example.demo.service.SeatInventoryService;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
-    private final SeatInventoryRepository repo;
+    private final SeatInventoryRecordRepository repo;
 
-    public SeatInventoryServiceImpl(SeatInventoryRepository repo) {
+    public SeatInventoryServiceImpl(SeatInventoryRecordRepository repo) {
         this.repo = repo;
     }
 
