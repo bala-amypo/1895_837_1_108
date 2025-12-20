@@ -5,10 +5,11 @@ import com.example.demo.repository.DynamicPriceRecordRepository;
 import com.example.demo.service.DynamicPricingEngineService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Service  // 👈 THIS MAKES IT A BEAN
+@Service
 public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineService {
 
     private final DynamicPriceRecordRepository repo;
@@ -21,7 +22,8 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
     public DynamicPriceRecord computeDynamicPrice(Long eventId) {
         DynamicPriceRecord record = new DynamicPriceRecord();
         record.setEventId(eventId);
-        record.setPrice(100.0);
+        record.setPrice(100.0); // example default price
+        record.setCalculatedAt(LocalDateTime.now());
         return repo.save(record);
     }
 
