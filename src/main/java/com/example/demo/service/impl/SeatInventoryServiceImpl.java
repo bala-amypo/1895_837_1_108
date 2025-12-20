@@ -28,7 +28,6 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
 
     @Override
     public List<SeatInventoryRecord> getByEvent(String eventCode) {
-        // Convert eventCode (String) to Long before calling repository method
         Long eventId = Long.parseLong(eventCode);
         return repo.findByEventId(eventId);
     }
