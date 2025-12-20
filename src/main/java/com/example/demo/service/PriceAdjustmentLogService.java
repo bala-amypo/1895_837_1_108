@@ -4,5 +4,10 @@ import com.example.demo.model.PriceAdjustmentLog;
 import java.util.List;
 
 public interface PriceAdjustmentLogService {
-    List<PriceAdjustmentLog> getLogs(String eventCode);
+
+    PriceAdjustmentLog logAdjustment(PriceAdjustmentLog log);
+
+    List<PriceAdjustmentLog> getAdjustments(Long eventId);
+
+    List<PriceAdjustmentLog> getAll();
 }
