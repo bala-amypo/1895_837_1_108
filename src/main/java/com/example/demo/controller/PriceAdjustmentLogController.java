@@ -16,13 +16,11 @@ public class PriceAdjustmentLogController {
         this.service = service;
     }
 
-    // Get logs for a specific event
     @GetMapping("/logs/{eventCode}")
     public List<PriceAdjustmentLog> getLogs(@PathVariable String eventCode) {
         return service.getLogs(eventCode);
     }
 
-    // Get all logs
     @GetMapping("/all")
     public List<PriceAdjustmentLog> getAllLogs() {
         return service.getAll();
