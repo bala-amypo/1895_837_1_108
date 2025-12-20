@@ -55,8 +55,12 @@ public class PricingRuleServiceImpl implements PricingRuleService {
 
     @Override
     public Optional<PricingRule> getRuleByCode(String ruleCode) {
-        return ruleRepo.findByRuleCode(ruleCode);
-    }
+        return ruleRepo.findAll()
+            .stream()
+            .filter(r -> r.getRuleCode().equals(ruleCode))
+            .findFirst();
+}
+
 
     @Override
     public List<PricingRule> getAllRules() {
