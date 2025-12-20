@@ -26,8 +26,10 @@ public class SeatInventoryController {
         return service.getAll();
     }
 
-    @GetMapping("/{eventCode}")
-    public List<SeatInventoryRecord> byEvent(@PathVariable String eventCode) {
+    @GetMapping("/event/{eventCode}")
+    public SeatInventoryRecord getByEvent(@PathVariable String eventCode) {
         return service.getByEvent(eventCode);
-    }
+}
+
+    
 }
