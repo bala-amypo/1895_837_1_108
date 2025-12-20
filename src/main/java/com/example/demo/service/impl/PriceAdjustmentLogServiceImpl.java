@@ -1,0 +1,22 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.model.PriceAdjustmentLog;
+import com.example.demo.repository.PriceAdjustmentLogRepository;
+import com.example.demo.service.PriceAdjustmentLogService;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class PriceAdjustmentLogServiceImpl implements PriceAdjustmentLogService {
+
+    private final PriceAdjustmentLogRepository repo;
+
+    public PriceAdjustmentLogServiceImpl(PriceAdjustmentLogRepository repo) {
+        this.repo = repo;
+    }
+
+    @Override
+    public List<PriceAdjustmentLog> getLogs(String eventCode) {
+        return repo.findByEventCode(eventCode);
+    }
+}
