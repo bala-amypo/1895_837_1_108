@@ -14,8 +14,8 @@ public class PricingRuleServiceImpl implements PricingRuleService {
 
     private final PricingRuleRepository ruleRepo;
 
-    public PricingRuleServiceImpl(PricingRuleRepository ruleRepo) {
-        this.ruleRepo = ruleRepo;
+    public PricingRuleServiceImpl(PricingRuleRepository ruleRepository) {
+        this.ruleRepo = ruleRepository;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class PricingRuleServiceImpl implements PricingRuleService {
     public PricingRule updateRule(Long id, PricingRule r) {
 
         PricingRule rule = ruleRepo.findById(id)
-                .orElseThrow(() -> new BadRequestException("rule not found"));
+                .orElseThrow(() -> new BadRequestException("Rule not found"));
 
         rule.setDescription(r.getDescription());
         rule.setActive(r.getActive());
@@ -54,8 +54,8 @@ public class PricingRuleServiceImpl implements PricingRuleService {
     }
 
     @Override
-    public Optional<PricingRule> getRuleByCode(String code) {
-        return ruleRepo.findByRuleCode(code);
+    public Optional<PricingRule> getRuleByCode(String ruleCode) {
+        return ruleRepo.findByRuleCode(ruleCode);
     }
 
     @Override
