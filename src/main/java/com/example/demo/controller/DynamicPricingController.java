@@ -1,20 +1,28 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.DynamicPriceRecord;
+import com.example.demo.service.DynamicPricingEngineService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/pricing")
 public class DynamicPricingController {
 
-    private final DynamicPricingEngineService service;
+    private final DynamicPricingEngineService pricingService;
 
-    public DynamicPricingController(DynamicPricingEngineService service) {
-        this.service = service;
+    public DynamicPricingController(DynamicPricingEngineService pricingService) {
+        this.pricingService = pricingService;
     }
 
-    @PostMapping("/{eventCode}/compute")
-    public DynamicPriceRecord compute(@PathVariable String eventCode) {
-        return service.computePrice(eventCode);
+    @PostMapping("/{eventId}")
+    public DynamicPriceRecord calculatePrice(@PathVariable Long eventId) {
+        return pricingService.calculatePrice(eventId);
     }
 
-    @GetMapping("/{eventCode}")
-    public List<DynamicPriceRecord> history(@PathVariable String eventCode) {
-        return service.history(eventCode);
+    @GetMapping("/event/{eventId}")
+    public List<DynamicPriceRecord> getPriceHistory(@PathVariable Long eventId) {
+        return pricingService.getPriceHistory(eventId);
     }
 }
