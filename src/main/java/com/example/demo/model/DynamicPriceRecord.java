@@ -4,32 +4,19 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "dynamic_price_record")
 public class DynamicPriceRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Event reference
     private Long eventId;
 
-    // Price fields
-    private Double computedPrice;
-    private Double previousPrice;
+    private Double price;
 
-    // Comma-separated applied rule codes
-    private String appliedRuleCodes;
+    private LocalDateTime calculatedAt;
 
-    private LocalDateTime computedAt;
-
-    // ---------- JPA Lifecycle ----------
-    @PrePersist
-    public void prePersist() {
-        this.computedAt = LocalDateTime.now();
-    }
-
-    // ---------- Getters & Setters ----------
+    public DynamicPriceRecord() {}
 
     public Long getId() {
         return id;
@@ -47,35 +34,19 @@ public class DynamicPriceRecord {
         this.eventId = eventId;
     }
 
-    public Double getComputedPrice() {
-        return computedPrice;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setComputedPrice(Double computedPrice) {
-        this.computedPrice = computedPrice;
+    public void setPrice(Double price) {   // ✅ REQUIRED
+        this.price = price;
     }
 
-    public Double getPreviousPrice() {
-        return previousPrice;
+    public LocalDateTime getCalculatedAt() {
+        return calculatedAt;
     }
 
-    public void setPreviousPrice(Double previousPrice) {
-        this.previousPrice = previousPrice;
-    }
-
-    public String getAppliedRuleCodes() {
-        return appliedRuleCodes;
-    }
-
-    public void setAppliedRuleCodes(String appliedRuleCodes) {
-        this.appliedRuleCodes = appliedRuleCodes;
-    }
-
-    public LocalDateTime getComputedAt() {
-        return computedAt;
-    }
-
-    public void setComputedAt(LocalDateTime computedAt) {
-        this.computedAt = computedAt;
+    public void setCalculatedAt(LocalDateTime calculatedAt) {  // ✅ REQUIRED
+        this.calculatedAt = calculatedAt;
     }
 }
