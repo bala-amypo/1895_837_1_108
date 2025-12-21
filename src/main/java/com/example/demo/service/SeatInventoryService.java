@@ -1,3 +1,8 @@
+package com.example.demo.service;
+
+import com.example.demo.model.SeatInventoryRecord;
+import java.util.List;
+
 public interface SeatInventoryService {
 
     SeatInventoryRecord save(SeatInventoryRecord record);
@@ -5,9 +10,4 @@ public interface SeatInventoryService {
     List<SeatInventoryRecord> findAll();
 
     SeatInventoryRecord findByEventId(Long eventId);
-
-    // 👇 REQUIRED BY TESTS
-    default SeatInventoryRecord createInventory(SeatInventoryRecord record) {
-        return save(record);
-    }
 }
