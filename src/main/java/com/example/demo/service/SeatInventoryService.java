@@ -10,5 +10,6 @@ public interface SeatInventoryService {
 
     List<SeatInventoryRecord> getAll();
 
-    SeatInventoryRecord getByEvent(String eventCode);
+    List<SeatInventoryRecord> getByEvent(String eventCode);
 }
+

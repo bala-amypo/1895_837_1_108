@@ -10,11 +10,17 @@ import java.util.List;
 @Service
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
-    private final SeatInventoryRecordRepository repository;
+    private final SeatInventoryRecordRepository seatRepo;
+    private final EventRecordRepository eventRepo;
 
-    public SeatInventoryServiceImpl(SeatInventoryRecordRepository repository) {
-        this.repository = repository;
+    public SeatInventoryServiceImpl(
+            SeatInventoryRecordRepository seatRepo,
+            EventRecordRepository eventRepo
+    ) {
+        this.seatRepo = seatRepo;
+        this.eventRepo = eventRepo;
     }
+
 
     @Override
     public SeatInventoryRecord create(SeatInventoryRecord record) {
