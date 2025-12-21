@@ -4,33 +4,35 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "dynamic_price_record")
 public class DynamicPriceRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Event reference
     private Long eventId;
 
-    // Price fields
+    // REQUIRED by testcases
     private Double computedPrice;
     private Double previousPrice;
-
-    // Comma-separated applied rule codes
     private String appliedRuleCodes;
 
-    private LocalDateTime computedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    // ---------- JPA Lifecycle ----------
+    // ---------- Lifecycle hooks ----------
     @PrePersist
     public void prePersist() {
-        this.computedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     // ---------- Getters & Setters ----------
-
     public Long getId() {
         return id;
     }
@@ -71,11 +73,11 @@ public class DynamicPriceRecord {
         this.appliedRuleCodes = appliedRuleCodes;
     }
 
-    public LocalDateTime getComputedAt() {
-        return computedAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setComputedAt(LocalDateTime computedAt) {
-        this.computedAt = computedAt;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }
