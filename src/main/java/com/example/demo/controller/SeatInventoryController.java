@@ -2,12 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.model.SeatInventoryRecord;
 import com.example.demo.service.SeatInventoryService;
-
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/seats")
+@RequestMapping("/api/seats")
 public class SeatInventoryController {
 
     private final SeatInventoryService service;
@@ -17,7 +17,7 @@ public class SeatInventoryController {
     }
 
     @PostMapping
-    public SeatInventoryRecord create(@RequestBody SeatInventoryRecord record) {
+    public SeatInventoryRecord save(@RequestBody SeatInventoryRecord record) {
         return service.save(record);
     }
 
