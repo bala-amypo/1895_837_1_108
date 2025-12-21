@@ -29,7 +29,5 @@ public class SeatInventoryController {
     @GetMapping("/event/{eventCode}")
     public SeatInventoryRecord getByEvent(@PathVariable String eventCode) {
         return service.getByEvent(eventCode);
-}
-
-    
+    }
 }
