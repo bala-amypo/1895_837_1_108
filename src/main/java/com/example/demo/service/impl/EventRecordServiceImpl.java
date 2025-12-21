@@ -10,39 +10,24 @@ import java.util.List;
 @Service
 public class EventRecordServiceImpl implements EventRecordService {
 
-    private final EventRecordRepository repository;
+    private final EventRecordRepository repo;
 
-    public EventRecordServiceImpl(EventRecordRepository repository) {
-        this.repository = repository;
+    public EventRecordServiceImpl(EventRecordRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public EventRecord createEvent(EventRecord event) {
-        return repository.save(event);
+    public EventRecord create(EventRecord event) {
+        return repo.save(event);
     }
 
     @Override
-    public EventRecord getEventById(Long id) {
-        return repository.findById(id).orElse(null);
+    public List<EventRecord> getAll() {
+        return repo.findAll();
     }
 
     @Override
-    public List<EventRecord> getAllEvents() {
-        return repository.findAll();
-    }
-
-    @Override
-    public EventRecord updateEventStatus(Long id, boolean active) {
-        EventRecord event = getEventById(id);
-        if (event != null) {
-            event.setActive(active);
-            return repository.save(event);
-        }
-        return null;
-    }
-
-    @Override
-    public EventRecord getEventByCode(String eventCode) {
-        return repository.findByEventCode(eventCode).orElse(null);
+    public EventRecord getOne(Long id) {
+        return repo.findById(id).orElse(null);
     }
 }
