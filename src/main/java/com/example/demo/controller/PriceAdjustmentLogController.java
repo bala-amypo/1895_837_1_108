@@ -2,12 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.model.PriceAdjustmentLog;
 import com.example.demo.service.PriceAdjustmentLogService;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/price-adjustments")
+@RequestMapping("/api/price-adjustments")
+@Tag(name = "Price Adjustment Log CRUD")
 public class PriceAdjustmentLogController {
 
     private final PriceAdjustmentLogService service;
@@ -16,13 +17,23 @@ public class PriceAdjustmentLogController {
         this.service = service;
     }
 
-    @GetMapping
-    public List<PriceAdjustmentLog> getAll() {
-        return service.getAll();
+    @PostMapping
+    public PriceAdjustmentLog create(@RequestBody PriceAdjustmentLog log) {
+        return service.save(log);
     }
 
-    @GetMapping("/{eventCode}")
-    public List<PriceAdjustmentLog> getByEventCode(@PathVariable String eventCode) {
-        return service.getLogs(eventCode);
+    @GetMapping
+    public List<PriceAdjustmentLog> getAll() {
+        return service.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public PriceAdjustmentLog getById(@PathVariable Long id) {
+        return service.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deleteById(id);
     }
 }
