@@ -5,13 +5,9 @@ import java.util.List;
 
 public interface EventRecordService {
 
-    EventRecord createEvent(EventRecord event);
+    EventRecord create(EventRecord event);
 
-    EventRecord getEventById(Long id);
+    List<EventRecord> getAll();
 
-    List<EventRecord> getAllEvents();
-
-    EventRecord updateEventStatus(Long id, boolean active);
-
-    EventRecord getEventByCode(String eventCode);
+    EventRecord getOne(Long id);
 }
