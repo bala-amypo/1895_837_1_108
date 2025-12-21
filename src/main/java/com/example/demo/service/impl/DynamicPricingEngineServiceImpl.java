@@ -18,11 +18,11 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
     }
 
     @Override
-    public DynamicPriceRecord compute(Long eventId) {
+    public DynamicPriceRecord computePrice(Long eventId) {
         DynamicPriceRecord record = new DynamicPriceRecord();
         record.setEventId(eventId);
-        record.setPrice(100.0); // base price logic
-        record.setCalculatedAt(LocalDateTime.now());
+        record.setComputedPrice(100.0);
+        record.setComputedAt(LocalDateTime.now());
         return priceRepo.save(record);
     }
 
@@ -33,6 +33,6 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
 
     @Override
     public List<DynamicPriceRecord> getPriceHistory(Long eventId) {
-        return priceRepo.findByEventId(eventId);
+        return priceRepo.findByEventIdOrderByComputedAtDesc(eventId);
     }
 }
