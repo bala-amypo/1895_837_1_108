@@ -81,4 +81,9 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
     public List<DynamicPriceRecord> getAllComputedPrices() {
         return priceRepo.findAll();
     }
+
+    @Override
+    public List<DynamicPriceRecord> getPriceHistory(Long eventId) {
+        return priceRepo.findByEventIdOrderByCalculatedAtDesc(eventId);
+    }
 }
