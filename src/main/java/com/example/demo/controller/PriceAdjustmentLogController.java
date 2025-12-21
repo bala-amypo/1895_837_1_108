@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.PriceAdjustmentLog;
 import com.example.demo.service.PriceAdjustmentLogService;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +17,9 @@ public class PriceAdjustmentLogController {
         this.service = service;
     }
 
-    @GetMapping("/event/{eventCode}")
-    public List<PriceAdjustmentLog> getLogs(@PathVariable String eventCode) {
-        return service.getLogs(eventCode);
-    }
-
-    @GetMapping
-    public List<PriceAdjustmentLog> getAll() {
-        return service.getAll();
+    @GetMapping("/{eventCode}")
+    public ApiResponse<List<PriceAdjustmentLog>> getLogs(@PathVariable String eventCode) {
+        return new ApiResponse<>(true, "Logs fetched",
+                service.getLogs(eventCode));
     }
 }
