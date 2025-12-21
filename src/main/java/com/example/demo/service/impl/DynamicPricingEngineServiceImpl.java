@@ -14,14 +14,14 @@ import java.util.List;
 public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineService {
 
     private final EventRecordRepository eventRepo;
-    private final SeatInventoryRecordRepository seatRepo;
+    private final SeatInventoryRepository seatRepo;
     private final PricingRuleRepository ruleRepo;
     private final DynamicPriceRecordRepository priceRepo;
     private final PriceAdjustmentLogRepository logRepo;
 
     public DynamicPricingEngineServiceImpl(
             EventRecordRepository eventRepo,
-            SeatInventoryRecordRepository seatRepo,
+            SeatInventoryRepository seatRepo,
             PricingRuleRepository ruleRepo,
             DynamicPriceRecordRepository priceRepo,
             PriceAdjustmentLogRepository logRepo) {
