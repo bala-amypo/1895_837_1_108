@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "dynamic_price_records")
 public class DynamicPriceRecord {
 
     @Id
@@ -12,18 +13,25 @@ public class DynamicPriceRecord {
 
     private Long eventId;
 
-    private Double price;
+    private double computedPrice;
 
-    private LocalDateTime calculatedAt;
+    private LocalDateTime computedAt;
 
-    public DynamicPriceRecord() {}
+    private Double previousPrice;
+
+    private String appliedRuleCodes;
+
+    /* ------------------ JPA lifecycle ------------------ */
+
+    @PrePersist
+    public void prePersist() {
+        this.computedAt = LocalDateTime.now();
+    }
+
+    /* ------------------ getters & setters ------------------ */
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getEventId() {
@@ -34,19 +42,47 @@ public class DynamicPriceRecord {
         this.eventId = eventId;
     }
 
-    public Double getPrice() {
-        return price;
+    /* --- REQUIRED BY TESTS & SERVICE --- */
+
+    public double getComputedPrice() {
+        return computedPrice;
     }
 
-    public void setPrice(Double price) {   // ✅ REQUIRED
-        this.price = price;
+    public void setComputedPrice(double computedPrice) {
+        this.computedPrice = computedPrice;
     }
 
-    public LocalDateTime getCalculatedAt() {
-        return calculatedAt;
+    /* compatibility with service impl */
+    public void setPrice(double price) {
+        this.computedPrice = price;
     }
 
-    public void setCalculatedAt(LocalDateTime calculatedAt) {  // ✅ REQUIRED
-        this.calculatedAt = calculatedAt;
+    public LocalDateTime getComputedAt() {
+        return computedAt;
+    }
+
+    public void setComputedAt(LocalDateTime computedAt) {
+        this.computedAt = computedAt;
+    }
+
+    /* compatibility with service impl */
+    public void setCalculatedAt(LocalDateTime time) {
+        this.computedAt = time;
+    }
+
+    public Double getPreviousPrice() {
+        return previousPrice;
+    }
+
+    public void setPreviousPrice(Double previousPrice) {
+        this.previousPrice = previousPrice;
+    }
+
+    public String getAppliedRuleCodes() {
+        return appliedRuleCodes;
+    }
+
+    public void setAppliedRuleCodes(String appliedRuleCodes) {
+        this.appliedRuleCodes = appliedRuleCodes;
     }
 }
