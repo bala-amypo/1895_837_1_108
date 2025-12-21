@@ -17,18 +17,18 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     }
 
     @Override
-    public SeatInventoryRecord create(SeatInventoryRecord record) {
+    public SeatInventoryRecord save(SeatInventoryRecord record) {
         return repository.save(record);
     }
 
     @Override
-    public List<SeatInventoryRecord> getAll() {
+    public List<SeatInventoryRecord> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public SeatInventoryRecord getByEventId(String eventCode) {
-        return repository.findByEventId(Long.parseLong(eventCode))
-                .orElseThrow(() -> new RuntimeException("Seat inventory not found"));
+    public SeatInventoryRecord findByEventId(Long eventId) {
+        return repository.findByEventId(eventId)
+                .orElse(null);
     }
 }
