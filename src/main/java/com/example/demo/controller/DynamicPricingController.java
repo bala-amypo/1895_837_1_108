@@ -16,9 +16,9 @@ public class DynamicPricingController {
         this.service = service;
     }
 
-    @PostMapping("/{eventId}")
+    @PostMapping("/compute/{eventId}")
     public DynamicPriceRecord compute(@PathVariable Long eventId) {
-        return service.compute(eventId);
+        return service.computePrice(eventId);
     }
 
     @GetMapping
