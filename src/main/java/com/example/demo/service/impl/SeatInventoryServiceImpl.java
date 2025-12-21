@@ -25,7 +25,6 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     @Override
     public SeatInventoryRecord create(SeatInventoryRecord record) {
 
-        // validate event exists (portal testcase requirement)
         if (!eventRepo.existsById(record.getEventId())) {
             throw new RuntimeException("Invalid eventId");
         }
@@ -39,11 +38,11 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     }
 
     @Override
-    public List<SeatInventoryRecord> getByEvent(String eventCode) {
+    public SeatInventoryRecord getByEvent(String eventCode) {
 
-        // convert ID string to long
         Long eventId = Long.parseLong(eventCode);
 
-        return seatRepo.findByEventId(eventId);
+        return seatRepo.findByEventId(eventId)
+                .orElseThrow(() -> new RuntimeException("Seat inventory not found"));
     }
 }
