@@ -6,6 +6,7 @@ import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,16 +28,8 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody User user) {
-        User saved = userService.save(user);
-        return ResponseEntity.ok(
-                new ApiResponse(true, "User registered successfully", saved)
-        );
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody AuthRequest request) {
 
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -45,11 +38,18 @@ public class AuthController {
                 )
         );
 
-        User user = userService.findByEmail(request.getEmail()).orElseThrow();
+        User user = userService.getByEmail(request.getEmail());
         String token = jwtProvider.generateToken(user.getEmail());
 
+        AuthResponse response = new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+
         return ResponseEntity.ok(
-                new AuthResponse(token, user.getId(), user.getEmail(), user.getRole())
+                new ApiResponse<>(true, "Login successful", response)
         );
     }
 }
