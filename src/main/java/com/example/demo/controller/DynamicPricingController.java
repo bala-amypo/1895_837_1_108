@@ -21,8 +21,8 @@ public class DynamicPricingController {
         return service.computePrice(eventId);
     }
 
-    @GetMapping
-    public List<DynamicPriceRecord> getAll() {
-        return service.getAllComputedPrices();
-    }
+    @GetMapping("/compute/{eventId}")
+    public DynamicPriceRecord compute(@PathVariable Long eventId) {
+    return service.computeDynamicPrice(eventId);
+}
 }
