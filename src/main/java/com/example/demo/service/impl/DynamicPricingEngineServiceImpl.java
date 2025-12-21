@@ -14,7 +14,7 @@ import java.util.List;
 public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineService {
 
     private final EventRecordRepository eventRepo;
-    private final SeatInventoryRepository seatRepo;
+    private final SeatInventoryRecordRepository seatRepo;
     private final PricingRuleRepository ruleRepo;
     private final DynamicPriceRecordRepository priceRepo;
     private final PriceAdjustmentLogRepository logRepo;
