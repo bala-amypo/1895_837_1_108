@@ -10,24 +10,24 @@ import java.util.List;
 @Service
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
-    private final SeatInventoryRecordRepository repository;
+    private final SeatInventoryRecordRepository repo;
 
-    public SeatInventoryServiceImpl(SeatInventoryRecordRepository repository) {
-        this.repository = repository;
+    public SeatInventoryServiceImpl(SeatInventoryRecordRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public SeatInventoryRecord createInventory(SeatInventoryRecord record) {
-        return repository.save(record);
+    public SeatInventoryRecord save(SeatInventoryRecord record) {
+        return repo.save(record);
     }
 
     @Override
-    public SeatInventoryRecord getInventoryByEvent(Long eventId) {
-        return repository.findByEventId(eventId).orElse(null);
+    public List<SeatInventoryRecord> findAll() {
+        return repo.findAll();
     }
 
     @Override
-    public List<SeatInventoryRecord> getAllInventory() {
-        return repository.findAll();
+    public SeatInventoryRecord findByEventId(Long eventId) {
+        return repo.findByEventId(eventId).orElse(null);
     }
 }
