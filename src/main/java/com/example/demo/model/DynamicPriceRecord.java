@@ -4,31 +4,32 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "dynamic_price_records")
+@Table(name = "dynamic_price_record")
 public class DynamicPriceRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long eventId;
 
-    private double computedPrice;
+    @Column(nullable = false)
+    private Double price;
 
-    private LocalDateTime computedAt;
+    @Column(nullable = false)
+    private LocalDateTime calculatedAt;
 
-    private Double previousPrice;
+    // ===== Constructors =====
+    public DynamicPriceRecord() {}
 
-    private String appliedRuleCodes;
-
-    /* ------------------ JPA lifecycle ------------------ */
-
-    @PrePersist
-    public void prePersist() {
-        this.computedAt = LocalDateTime.now();
+    public DynamicPriceRecord(Long eventId, Double price, LocalDateTime calculatedAt) {
+        this.eventId = eventId;
+        this.price = price;
+        this.calculatedAt = calculatedAt;
     }
 
-    /* ------------------ getters & setters ------------------ */
+    // ===== Getters & Setters =====
 
     public Long getId() {
         return id;
@@ -42,47 +43,21 @@ public class DynamicPriceRecord {
         this.eventId = eventId;
     }
 
-    /* --- REQUIRED BY TESTS & SERVICE --- */
-
-    public double getComputedPrice() {
-        return computedPrice;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setComputedPrice(double computedPrice) {
-        this.computedPrice = computedPrice;
+    // 🔴 REQUIRED BY SERVICE IMPL
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    /* compatibility with service impl */
-    public void setPrice(double price) {
-        this.computedPrice = price;
+    public LocalDateTime getCalculatedAt() {
+        return calculatedAt;
     }
 
-    public LocalDateTime getComputedAt() {
-        return computedAt;
-    }
-
-    public void setComputedAt(LocalDateTime computedAt) {
-        this.computedAt = computedAt;
-    }
-
-    /* compatibility with service impl */
-    public void setCalculatedAt(LocalDateTime time) {
-        this.computedAt = time;
-    }
-
-    public Double getPreviousPrice() {
-        return previousPrice;
-    }
-
-    public void setPreviousPrice(Double previousPrice) {
-        this.previousPrice = previousPrice;
-    }
-
-    public String getAppliedRuleCodes() {
-        return appliedRuleCodes;
-    }
-
-    public void setAppliedRuleCodes(String appliedRuleCodes) {
-        this.appliedRuleCodes = appliedRuleCodes;
+    // 🔴 REQUIRED BY SERVICE IMPL
+    public void setCalculatedAt(LocalDateTime calculatedAt) {
+        this.calculatedAt = calculatedAt;
     }
 }
