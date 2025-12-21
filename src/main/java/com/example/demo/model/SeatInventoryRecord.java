@@ -1,9 +1,10 @@
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "seat_inventory_records")
 public class SeatInventoryRecord {
 
     @Id
@@ -18,54 +19,20 @@ public class SeatInventoryRecord {
     @PrePersist
     @PreUpdate
     public void setUpdatedAt() {
-        this.updatedAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    public SeatInventoryRecord() {
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public SeatInventoryRecord(Long id, Long eventId, Integer totalSeats,
-                               Integer remainingSeats, LocalDateTime updatedAt) {
+    public Long getEventId() { return eventId; }
+    public void setEventId(Long eventId) { this.eventId = eventId; }
 
-        this.id = id;
-        this.eventId = eventId;
-        this.totalSeats = totalSeats;
-        this.remainingSeats = remainingSeats;
-        this.updatedAt = updatedAt;
-    }
+    public Integer getTotalSeats() { return totalSeats; }
+    public void setTotalSeats(Integer totalSeats) { this.totalSeats = totalSeats; }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Integer getRemainingSeats() { return remainingSeats; }
+    public void setRemainingSeats(Integer remainingSeats) { this.remainingSeats = remainingSeats; }
 
-    public Long getEventId() {
-        return eventId;
-    }
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
-    }
-
-    public Integer getTotalSeats() {
-        return totalSeats;
-    }
-    public void setTotalSeats(Integer totalSeats) {
-        this.totalSeats = totalSeats;
-    }
-
-    public Integer getRemainingSeats() {
-        return remainingSeats;
-    }
-    public void setRemainingSeats(Integer remainingSeats) {
-        this.remainingSeats = remainingSeats;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

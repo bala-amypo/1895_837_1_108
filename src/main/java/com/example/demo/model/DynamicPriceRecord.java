@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "dynamic_price_records")
 public class DynamicPriceRecord {
 
     @Id
@@ -11,18 +12,22 @@ public class DynamicPriceRecord {
     private Long id;
 
     private Long eventId;
-
-    private double computedPrice;
-
+    private Double computedPrice;
     private LocalDateTime computedAt;
 
-    public Long getId() { return id; }
-    public Long getEventId() { return eventId; }
-    public double getComputedPrice() { return computedPrice; }
-    public LocalDateTime getComputedAt() { return computedAt; }
+    @PrePersist
+    public void setComputedAt() {
+        computedAt = LocalDateTime.now();
+    }
 
+    public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
-    public void setComputedPrice(double computedPrice) { this.computedPrice = computedPrice; }
-    public void setComputedAt(LocalDateTime computedAt) { this.computedAt = computedAt; }
+
+    public Double getComputedPrice() { return computedPrice; }
+    public void setComputedPrice(Double computedPrice) { this.computedPrice = computedPrice; }
+
+    public LocalDateTime getComputedAt() { return computedAt; }
 }
