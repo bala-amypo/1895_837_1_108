@@ -15,18 +15,22 @@ public class PriceAdjustmentLogServiceImpl implements PriceAdjustmentLogService 
         this.repository = repository;
     }
 
+    @Override
     public PriceAdjustmentLog save(PriceAdjustmentLog log) {
         return repository.save(log);
     }
 
+    @Override
     public List<PriceAdjustmentLog> findAll() {
         return repository.findAll();
     }
 
+    @Override
     public PriceAdjustmentLog findById(Long id) {
         return repository.findById(id).orElse(null);
     }
 
+    @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
