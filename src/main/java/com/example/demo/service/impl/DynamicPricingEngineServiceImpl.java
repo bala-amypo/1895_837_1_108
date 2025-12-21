@@ -21,7 +21,7 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
 
     public DynamicPricingEngineServiceImpl(
             EventRecordRepository eventRepo,
-            SeatInventoryRepository seatRepo,
+            SeatInventoryRecordRepository seatRepo,
             PricingRuleRepository ruleRepo,
             DynamicPriceRecordRepository priceRepo,
             PriceAdjustmentLogRepository logRepo) {
