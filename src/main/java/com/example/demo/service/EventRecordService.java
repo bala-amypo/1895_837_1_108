@@ -4,10 +4,8 @@ import com.example.demo.model.EventRecord;
 import java.util.List;
 
 public interface EventRecordService {
-
-    EventRecord create(EventRecord event);
-
-    List<EventRecord> getAll();
-
-    EventRecord getOne(Long id);
+    EventRecord save(EventRecord event);
+    List<EventRecord> findAll();
+    EventRecord findById(Long id);
+    void deleteById(Long id);
 }
