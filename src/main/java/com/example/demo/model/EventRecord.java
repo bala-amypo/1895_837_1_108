@@ -1,8 +1,10 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "event_records")
@@ -19,6 +21,18 @@ public class EventRecord {
     private Double basePrice;
     private Boolean active = true;
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<SeatInventoryRecord> inventories;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<DynamicPriceRecord> dynamicPrices;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<PriceAdjustmentLog> priceAdjustmentLogs;
 
     @PrePersist
     public void setCreatedAt() {
