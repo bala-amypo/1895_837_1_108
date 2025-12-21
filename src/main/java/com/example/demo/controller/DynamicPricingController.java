@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.DynamicPriceRecord;
 import com.example.demo.service.DynamicPricingEngineService;
 import org.springframework.web.bind.annotation.*;
@@ -8,30 +7,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/dynamic-pricing")
+@RequestMapping("/pricing")
 public class DynamicPricingController {
 
-    private final DynamicPricingEngineService pricingService;
+    private final DynamicPricingEngineService service;
 
-    public DynamicPricingController(DynamicPricingEngineService pricingService) {
-        this.pricingService = pricingService;
+    public DynamicPricingController(DynamicPricingEngineService service) {
+        this.service = service;
     }
 
-    @GetMapping("/calculate/{eventId}")
-    public DynamicPriceRecord calculatePrice(@PathVariable Long eventId) {
-        if (eventId == null || eventId <= 0) {
-            throw new BadRequestException("Event ID must be a positive number");
-        }
-
-        return pricingService.computeDynamicPrice(eventId);
+    @PostMapping("/compute/{eventId}")
+    public DynamicPriceRecord compute(@PathVariable Long eventId) {
+        return service.computePrice(eventId);
     }
 
-    @GetMapping("/history/{eventId}")
-    public List<DynamicPriceRecord> getPriceHistory(@PathVariable Long eventId) {
-        if (eventId == null || eventId <= 0) {
-            throw new BadRequestException("Event ID must be a positive number");
-        }
-
-        return pricingService.getPriceHistory(eventId);
+    @GetMapping
+    public List<DynamicPriceRecord> getAll() {
+        return service.getAllComputedPrices();
     }
 }

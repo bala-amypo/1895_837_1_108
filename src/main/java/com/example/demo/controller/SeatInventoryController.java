@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/seats")
+@RequestMapping("/seat-inventory")
 public class SeatInventoryController {
 
     private final SeatInventoryService service;
@@ -17,17 +17,12 @@ public class SeatInventoryController {
     }
 
     @PostMapping
-    public SeatInventoryRecord create(@RequestBody SeatInventoryRecord s) {
-        return service.create(s);
+    public SeatInventoryRecord create(@RequestBody SeatInventoryRecord record) {
+        return service.save(record);
     }
 
     @GetMapping
     public List<SeatInventoryRecord> getAll() {
         return service.getAll();
-    }
-
-    @GetMapping("/event/{eventCode}")
-    public SeatInventoryRecord getByEvent(@PathVariable String eventCode) {
-        return service.getByEvent(eventCode);
     }
 }
