@@ -9,8 +9,7 @@ import java.util.Optional;
 public interface DynamicPriceRecordRepository
         extends JpaRepository<DynamicPriceRecord, Long> {
 
-    Optional<DynamicPriceRecord>
-        findFirstByEventIdOrderByCalculatedAtDesc(Long eventId);
+    Optional<DynamicPriceRecord> findFirstByEventIdOrderByComputedAtDesc(Long eventId);
 
     List<DynamicPriceRecord> findByEventId(Long eventId);
 }
