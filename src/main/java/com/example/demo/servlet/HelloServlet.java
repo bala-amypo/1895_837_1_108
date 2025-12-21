@@ -10,7 +10,8 @@ import java.io.IOException;
 public class HelloServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        resp.getWriter().write("Hello from Dynamic Event Ticket Pricing Servlet");
-    }
-}
+                throws IOException {
+                        resp.getWriter().write("Hello from Dynamic Event Ticket Pricing Servlet");
+                            }
+                            }
+                            
