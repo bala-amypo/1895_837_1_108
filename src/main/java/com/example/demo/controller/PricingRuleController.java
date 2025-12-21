@@ -1,45 +1,25 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.PricingRule;
-import com.example.demo.service.PricingRuleService;
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.model.PriceAdjustmentLog;
+import com.example.demo.service.PriceAdjustmentLogService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
-@RequestMapping("/rules")
-public class PricingRuleController {
+@RequestMapping("/price-adjustments")
+public class PriceAdjustmentLogController {
 
-    private final PricingRuleService service;
+    private final PriceAdjustmentLogService service;
 
-    public PricingRuleController(PricingRuleService service) {
+    public PriceAdjustmentLogController(PriceAdjustmentLogService service) {
         this.service = service;
     }
 
-    @PostMapping
-    public PricingRule create(@RequestBody PricingRule rule) {
-        return service.createRule(rule);
-    }
-
-    @PutMapping("/{id}")
-    public PricingRule update(@PathVariable Long id, @RequestBody PricingRule rule) {
-        return service.updateRule(id, rule);
-    }
-
-    @GetMapping
-    public List<PricingRule> getAll() {
-        return service.getAllRules();
-    }
-
-    @GetMapping("/active")
-    public List<PricingRule> getActive() {
-        return service.getActiveRules();
-    }
-
-    @GetMapping("/{code}")
-    public PricingRule getByCode(@PathVariable String code) {
-        return service.getRuleByCode(code).orElseThrow();
+    @GetMapping("/{eventCode}")
+    public ApiResponse<List<PriceAdjustmentLog>> getLogs(@PathVariable String eventCode) {
+        return new ApiResponse<>(true, "Logs fetched",
+                service.getLogs(eventCode));
     }
 }
