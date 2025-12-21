@@ -4,29 +4,78 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "dynamic_price_record")
 public class DynamicPriceRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Event reference
     private Long eventId;
 
-    private Double price;
+    // Price fields
+    private Double computedPrice;
+    private Double previousPrice;
 
-    private LocalDateTime calculatedAt;
+    // Comma-separated applied rule codes
+    private String appliedRuleCodes;
 
-    // --- getters and setters ---
+    private LocalDateTime computedAt;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ---------- JPA Lifecycle ----------
+    @PrePersist
+    public void prePersist() {
+        this.computedAt = LocalDateTime.now();
+    }
 
-    public Long getEventId() { return eventId; }
-    public void setEventId(Long eventId) { this.eventId = eventId; }
+    // ---------- Getters & Setters ----------
 
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
+    public Long getId() {
+        return id;
+    }
 
-    public LocalDateTime getCalculatedAt() { return calculatedAt; }
-    public void setCalculatedAt(LocalDateTime calculatedAt) { this.calculatedAt = calculatedAt; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+
+    public Double getComputedPrice() {
+        return computedPrice;
+    }
+
+    public void setComputedPrice(Double computedPrice) {
+        this.computedPrice = computedPrice;
+    }
+
+    public Double getPreviousPrice() {
+        return previousPrice;
+    }
+
+    public void setPreviousPrice(Double previousPrice) {
+        this.previousPrice = previousPrice;
+    }
+
+    public String getAppliedRuleCodes() {
+        return appliedRuleCodes;
+    }
+
+    public void setAppliedRuleCodes(String appliedRuleCodes) {
+        this.appliedRuleCodes = appliedRuleCodes;
+    }
+
+    public LocalDateTime getComputedAt() {
+        return computedAt;
+    }
+
+    public void setComputedAt(LocalDateTime computedAt) {
+        this.computedAt = computedAt;
+    }
 }
