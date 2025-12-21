@@ -4,30 +4,30 @@ import com.example.demo.model.EventRecord;
 import com.example.demo.repository.EventRecordRepository;
 import com.example.demo.service.EventRecordService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class EventRecordServiceImpl implements EventRecordService {
 
-    private final EventRecordRepository repo;
+    private final EventRecordRepository repository;
 
-    public EventRecordServiceImpl(EventRecordRepository repo) {
-        this.repo = repo;
+    public EventRecordServiceImpl(EventRecordRepository repository) {
+        this.repository = repository;
     }
 
-    @Override
-    public EventRecord create(EventRecord event) {
-        return repo.save(event);
+    public EventRecord save(EventRecord event) {
+        return repository.save(event);
     }
 
-    @Override
-    public List<EventRecord> getAll() {
-        return repo.findAll();
+    public List<EventRecord> findAll() {
+        return repository.findAll();
     }
 
-    @Override
-    public EventRecord getOne(Long id) {
-        return repo.findById(id).orElse(null);
+    public EventRecord findById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }

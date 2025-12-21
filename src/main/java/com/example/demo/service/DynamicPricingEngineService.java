@@ -4,10 +4,8 @@ import com.example.demo.model.DynamicPriceRecord;
 import java.util.List;
 
 public interface DynamicPricingEngineService {
-
-    DynamicPriceRecord computePrice(Long eventId);
-
-    List<DynamicPriceRecord> getAllComputedPrices();
-
-    List<DynamicPriceRecord> getPriceHistory(Long eventId);
+    DynamicPriceRecord save(DynamicPriceRecord record);
+    List<DynamicPriceRecord> findAll();
+    DynamicPriceRecord findById(Long id);
+    void deleteById(Long id);
 }

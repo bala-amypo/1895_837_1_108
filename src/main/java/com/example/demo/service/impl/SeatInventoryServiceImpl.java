@@ -4,30 +4,30 @@ import com.example.demo.model.SeatInventoryRecord;
 import com.example.demo.repository.SeatInventoryRecordRepository;
 import com.example.demo.service.SeatInventoryService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
-    private final SeatInventoryRecordRepository repo;
+    private final SeatInventoryRecordRepository repository;
 
-    public SeatInventoryServiceImpl(SeatInventoryRecordRepository repo) {
-        this.repo = repo;
+    public SeatInventoryServiceImpl(SeatInventoryRecordRepository repository) {
+        this.repository = repository;
     }
 
-    @Override
-    public SeatInventoryRecord save(SeatInventoryRecord record) {
-        return repo.save(record);
+    public SeatInventoryRecord save(SeatInventoryRecord inventory) {
+        return repository.save(inventory);
     }
 
-    @Override
     public List<SeatInventoryRecord> findAll() {
-        return repo.findAll();
+        return repository.findAll();
     }
 
-    @Override
-    public SeatInventoryRecord findByEventId(Long eventId) {
-        return repo.findByEventId(eventId).orElse(null);
+    public SeatInventoryRecord findById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }

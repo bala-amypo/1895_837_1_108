@@ -4,7 +4,6 @@ import com.example.demo.model.PriceAdjustmentLog;
 import com.example.demo.repository.PriceAdjustmentLogRepository;
 import com.example.demo.service.PriceAdjustmentLogService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -16,13 +15,19 @@ public class PriceAdjustmentLogServiceImpl implements PriceAdjustmentLogService 
         this.repository = repository;
     }
 
-    @Override
-    public List<PriceAdjustmentLog> getAll() {
+    public PriceAdjustmentLog save(PriceAdjustmentLog log) {
+        return repository.save(log);
+    }
+
+    public List<PriceAdjustmentLog> findAll() {
         return repository.findAll();
     }
 
-    @Override
-    public List<PriceAdjustmentLog> getLogs(String eventCode) {
-        return repository.findByEventCode(eventCode);
+    public PriceAdjustmentLog findById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }

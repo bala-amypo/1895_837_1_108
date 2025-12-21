@@ -2,12 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.model.EventRecord;
 import com.example.demo.service.EventRecordService;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping("/api/events")
+@Tag(name = "Event CRUD")
 public class EventRecordController {
 
     private final EventRecordService service;
@@ -18,16 +19,21 @@ public class EventRecordController {
 
     @PostMapping
     public EventRecord create(@RequestBody EventRecord event) {
-        return service.create(event);
+        return service.save(event);
     }
 
     @GetMapping
     public List<EventRecord> getAll() {
-        return service.getAll();
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public EventRecord getById(@PathVariable Long id) {
-        return service.getOne(id);
+        return service.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deleteById(id);
     }
 }
