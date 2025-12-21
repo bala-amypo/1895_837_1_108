@@ -11,19 +11,19 @@ public class DynamicPriceRecord {
     private Long id;
 
     private Long eventId;
-    private Double price;
-    private LocalDateTime calculatedAt;
+
+    private double computedPrice;
+
+    private LocalDateTime computedAt;
 
     public Long getId() { return id; }
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
 
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
+    public double getComputedPrice() { return computedPrice; }
+    public void setComputedPrice(double computedPrice) { this.computedPrice = computedPrice; }
 
-    public LocalDateTime getCalculatedAt() { return calculatedAt; }
-    public void setCalculatedAt(LocalDateTime calculatedAt) {
-        this.calculatedAt = calculatedAt;
-    }
+    public LocalDateTime getComputedAt() { return computedAt; }
+    public void setComputedAt(LocalDateTime computedAt) { this.computedAt = computedAt; }
 }
