@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
@@ -16,22 +15,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authManager;
-    private final JwtTokenProvider jwtProvider;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
-    public AuthController(AuthenticationManager authManager,
-                          JwtTokenProvider jwtProvider,
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtTokenProvider jwtTokenProvider,
                           UserService userService) {
-        this.authManager = authManager;
-        this.jwtProvider = jwtProvider;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody AuthRequest request) {
+    @PostMapping("/register")
+    public User register(@RequestBody User user) {
+        return userService.save(user);
+    }
 
-        authManager.authenticate(
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+
+        authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
@@ -39,7 +43,7 @@ public class AuthController {
         );
 
         User user = userService.getByEmail(request.getEmail());
-        String token = jwtProvider.generateToken(user.getEmail());
+        String token = jwtTokenProvider.generateToken(user.getEmail());
 
         AuthResponse response = new AuthResponse(
                 token,
@@ -48,8 +52,6 @@ public class AuthController {
                 user.getRole()
         );
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Login successful", response)
-        );
+        return ResponseEntity.ok(response);
     }
 }
