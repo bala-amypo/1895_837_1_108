@@ -8,37 +8,38 @@ import java.util.List;
 import java.util.Optional;
 
 
-@RequestMapping("/api/rules")
+@RestController
+@RequestMapping("/rules")
 public class PricingRuleController {
 
-    private final PricingRuleService ruleService;
+    private final PricingRuleService service;
 
-    public PricingRuleController(PricingRuleService ruleService) {
-        this.ruleService = ruleService;
+    public PricingRuleController(PricingRuleService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public PricingRule add(@RequestBody PricingRule rule) {
-        return ruleService.createRule(rule);
+    public PricingRule create(@RequestBody PricingRule rule) {
+        return service.createRule(rule);
     }
 
     @PutMapping("/{id}")
     public PricingRule update(@PathVariable Long id, @RequestBody PricingRule rule) {
-        return ruleService.updateRule(id, rule);
+        return service.updateRule(id, rule);
     }
-@RestController
+
     @GetMapping
-    public List<PricingRule> list() {
-        return ruleService.getAllRules();
+    public List<PricingRule> getAll() {
+        return service.getAllRules();
     }
 
     @GetMapping("/active")
-    public List<PricingRule> activeRules() {
-        return ruleService.getActiveRules();
+    public List<PricingRule> getActive() {
+        return service.getActiveRules();
     }
 
     @GetMapping("/{code}")
-    public Optional<PricingRule> getRule(@PathVariable String code) {
-        return ruleService.getRuleByCode(code);
+    public PricingRule getByCode(@PathVariable String code) {
+        return service.getRuleByCode(code).orElseThrow();
     }
 }
