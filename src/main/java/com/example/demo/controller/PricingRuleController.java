@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+
 @RequestMapping("/api/rules")
 public class PricingRuleController {
 
@@ -26,7 +26,7 @@ public class PricingRuleController {
     public PricingRule update(@PathVariable Long id, @RequestBody PricingRule rule) {
         return ruleService.updateRule(id, rule);
     }
-
+@RestController
     @GetMapping
     public List<PricingRule> list() {
         return ruleService.getAllRules();
