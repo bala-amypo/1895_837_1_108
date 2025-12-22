@@ -130,7 +130,7 @@
 //         try {
 //             servlet.doGet(req, resp);
 //             Assert.fail("Expected RuntimeException");
-//         } catch (RuntimeException ex) {
+        } catch (RuntimeException ex) {
 //             Assert.assertEquals(ex.getMessage(), "Writer error");
 //         }
 //     }
