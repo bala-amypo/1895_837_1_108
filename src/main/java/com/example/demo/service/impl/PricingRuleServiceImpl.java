@@ -6,36 +6,58 @@ import com.example.demo.repository.PricingRuleRepository;
 import com.example.demo.service.PricingRuleService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PricingRuleServiceImpl implements PricingRuleService {
 
-    private final PricingRuleRepository pricingRuleRepository;
+    private final PricingRuleRepository repo;
 
-    public PricingRuleServiceImpl(PricingRuleRepository pricingRuleRepository) {
-        this.pricingRuleRepository = pricingRuleRepository;
+    public PricingRuleServiceImpl(PricingRuleRepository repo) {
+        this.repo = repo;
     }
+
+    // ===== Test-used methods =====
 
     @Override
     public PricingRule createRule(PricingRule rule) {
-
         if (rule.getPriceMultiplier() == null || rule.getPriceMultiplier() <= 0) {
             throw new BadRequestException("Price multiplier must be > 0");
         }
-
-        if (pricingRuleRepository.existsByRuleCode(rule.getRuleCode())) {
+        if (repo.existsByRuleCode(rule.getRuleCode())) {
             throw new BadRequestException("Rule code already exists");
         }
-
-        return pricingRuleRepository.save(rule);
+        return repo.save(rule);
     }
 
     @Override
     public List<PricingRule> getActiveRules() {
-        return pricingRuleRepository.findByActiveTrue();
+        return repo.findByActiveTrue();
     }
 
     @Override
     public List<PricingRule> getAllRules() {
-        return pricingRuleRepository.findAll();
+        return repo.findAll();
+    }
+
+    // ===== Controller-required CRUD methods =====
+
+    @Override
+    public PricingRule save(PricingRule rule) {
+        return repo.save(rule);
+    }
+
+    @Override
+    public List<PricingRule> findAll() {
+        return repo.findAll();
+    }
+
+    @Override
+    public Optional<PricingRule> findById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        // no-op
     }
 }

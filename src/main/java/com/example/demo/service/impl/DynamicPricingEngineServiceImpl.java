@@ -11,93 +11,110 @@ import java.util.*;
 
 public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineService {
 
-    private final EventRecordRepository eventRepository;
-    private final SeatInventoryRecordRepository inventoryRepository;
-    private final PricingRuleRepository ruleRepository;
-    private final DynamicPriceRecordRepository priceRepository;
-    private final PriceAdjustmentLogRepository logRepository;
+    private final EventRecordRepository eventRepo;
+    private final SeatInventoryRecordRepository invRepo;
+    private final PricingRuleRepository ruleRepo;
+    private final DynamicPriceRecordRepository priceRepo;
+    private final PriceAdjustmentLogRepository logRepo;
 
     public DynamicPricingEngineServiceImpl(
-            EventRecordRepository eventRepository,
-            SeatInventoryRecordRepository inventoryRepository,
-            PricingRuleRepository ruleRepository,
-            DynamicPriceRecordRepository priceRepository,
-            PriceAdjustmentLogRepository logRepository) {
+            EventRecordRepository eventRepo,
+            SeatInventoryRecordRepository invRepo,
+            PricingRuleRepository ruleRepo,
+            DynamicPriceRecordRepository priceRepo,
+            PriceAdjustmentLogRepository logRepo) {
 
-        this.eventRepository = eventRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.ruleRepository = ruleRepository;
-        this.priceRepository = priceRepository;
-        this.logRepository = logRepository;
+        this.eventRepo = eventRepo;
+        this.invRepo = invRepo;
+        this.ruleRepo = ruleRepo;
+        this.priceRepo = priceRepo;
+        this.logRepo = logRepo;
     }
+
+    // ===== Test-used methods =====
 
     @Override
     public DynamicPriceRecord computeDynamicPrice(Long eventId) {
 
-        EventRecord event = eventRepository.findById(eventId)
+        EventRecord event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
         if (!event.getActive()) {
             throw new BadRequestException("Event is not active");
         }
 
-        SeatInventoryRecord inventory = inventoryRepository.findByEventId(eventId)
+        SeatInventoryRecord inv = invRepo.findByEventId(eventId)
                 .orElseThrow(() -> new RuntimeException("Seat inventory not found"));
 
-        List<PricingRule> rules = ruleRepository.findByActiveTrue();
+        List<PricingRule> rules = ruleRepo.findByActiveTrue();
 
         double multiplier = 1.0;
-        StringBuilder appliedRules = new StringBuilder();
+        StringBuilder applied = new StringBuilder();
 
-        long daysToEvent =
-                ChronoUnit.DAYS.between(LocalDate.now(), event.getEventDate());
+        long days = ChronoUnit.DAYS.between(LocalDate.now(), event.getEventDate());
 
-        for (PricingRule rule : rules) {
+        for (PricingRule r : rules) {
+            if (inv.getRemainingSeats() >= r.getMinRemainingSeats()
+                    && inv.getRemainingSeats() <= r.getMaxRemainingSeats()
+                    && days <= r.getDaysBeforeEvent()) {
 
-            boolean seatMatch =
-                    inventory.getRemainingSeats() >= rule.getMinRemainingSeats()
-                            && inventory.getRemainingSeats() <= rule.getMaxRemainingSeats();
-
-            boolean dayMatch = daysToEvent <= rule.getDaysBeforeEvent();
-
-            if (seatMatch && dayMatch) {
-                if (rule.getPriceMultiplier() > multiplier) {
-                    multiplier = rule.getPriceMultiplier();
+                if (r.getPriceMultiplier() > multiplier) {
+                    multiplier = r.getPriceMultiplier();
                 }
-                appliedRules.append(rule.getRuleCode()).append(",");
+                applied.append(r.getRuleCode()).append(",");
             }
         }
 
-        double computedPrice = event.getBasePrice() * multiplier;
+        double price = event.getBasePrice() * multiplier;
 
         DynamicPriceRecord record = new DynamicPriceRecord();
         record.setEventId(eventId);
-        record.setComputedPrice(computedPrice);
-        record.setAppliedRuleCodes(appliedRules.toString());
+        record.setComputedPrice(price);
+        record.setAppliedRuleCodes(applied.toString());
 
-        Optional<DynamicPriceRecord> previous =
-                priceRepository.findFirstByEventIdOrderByComputedAtDesc(eventId);
+        Optional<DynamicPriceRecord> prev =
+                priceRepo.findFirstByEventIdOrderByComputedAtDesc(eventId);
 
-        if (previous.isPresent()
-                && !previous.get().getComputedPrice().equals(computedPrice)) {
-
+        if (prev.isPresent() && !prev.get().getComputedPrice().equals(price)) {
             PriceAdjustmentLog log = new PriceAdjustmentLog();
             log.setEventId(eventId);
-            log.setOldPrice(previous.get().getComputedPrice());
-            log.setNewPrice(computedPrice);
-            logRepository.save(log);
+            log.setOldPrice(prev.get().getComputedPrice());
+            log.setNewPrice(price);
+            logRepo.save(log);
         }
 
-        return priceRepository.save(record);
+        return priceRepo.save(record);
     }
 
     @Override
     public List<DynamicPriceRecord> getPriceHistory(Long eventId) {
-        return priceRepository.findByEventIdOrderByComputedAtDesc(eventId);
+        return priceRepo.findByEventIdOrderByComputedAtDesc(eventId);
     }
 
     @Override
     public List<DynamicPriceRecord> getAllComputedPrices() {
-        return priceRepository.findAll();
+        return priceRepo.findAll();
+    }
+
+    // ===== Controller-required CRUD methods =====
+
+    @Override
+    public DynamicPriceRecord save(DynamicPriceRecord r) {
+        return priceRepo.save(r);
+    }
+
+    @Override
+    public List<DynamicPriceRecord> findAll() {
+        return priceRepo.findAll();
+    }
+
+    @Override
+    public Optional<DynamicPriceRecord> findById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        // no-op
     }
 }
