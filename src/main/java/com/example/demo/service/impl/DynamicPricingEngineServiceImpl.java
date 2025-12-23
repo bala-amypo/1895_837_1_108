@@ -7,7 +7,6 @@ import com.example.demo.service.DynamicPricingEngineService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -47,11 +46,7 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
                 .orElseThrow(() -> new RuntimeException("Seat inventory not found"));
 
         double calculatedPrice = event.getBasePrice();
-
-        long daysLeft = ChronoUnit.DAYS.between(
-                LocalDate.now(),
-                event.getEventDate()
-        );
+        int daysLeft = (int) LocalDate.now().until(event.getEventDate()).getDays();
 
         StringBuilder appliedRules = new StringBuilder();
 
@@ -66,23 +61,20 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
             }
         }
 
-        String appliedRuleCodes =
-                appliedRules.length() > 0
-                        ? appliedRules.substring(0, appliedRules.length() - 1)
-                        : "";
+        final double finalPrice = calculatedPrice;
 
         DynamicPriceRecord record = new DynamicPriceRecord();
         record.setEventId(eventId);
-        record.setComputedPrice(calculatedPrice);
-        record.setAppliedRuleCodes(appliedRuleCodes);
+        record.setComputedPrice(finalPrice);
+        record.setAppliedRuleCodes(appliedRules.toString());
 
         priceRepo.findFirstByEventIdOrderByComputedAtDesc(eventId)
                 .ifPresent(prev -> {
-                    if (Double.compare(prev.getComputedPrice(), calculatedPrice) != 0) {
+                    if (!prev.getComputedPrice().equals(finalPrice)) {
                         PriceAdjustmentLog log = new PriceAdjustmentLog();
                         log.setEventId(eventId);
                         log.setOldPrice(prev.getComputedPrice());
-                        log.setNewPrice(calculatedPrice);
+                        log.setNewPrice(finalPrice);
                         logRepo.save(log);
                     }
                 });
