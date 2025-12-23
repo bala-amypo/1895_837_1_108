@@ -1,6 +1,9 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 
@@ -48,18 +51,26 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             if (!enabled) return false;
+
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
+
             return true;
         } catch (JwtException | IllegalArgumentException ex) {
             return false;
         }
     }
 
+    // ✅ FIXED METHOD (IMPORTANT)
     public String getUsernameFromToken(String token) {
-        return getAllClaims(token).getSubject();
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
     }
 
     public Map<String, Object> getAllClaims(String token) {
