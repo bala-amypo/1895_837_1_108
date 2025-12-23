@@ -1,7 +1,10 @@
+
 package com.example.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.PriceAdjustmentLog;
+import java.util.*;
 
-public interface PriceAdjustmentLogRepository extends JpaRepository<PriceAdjustmentLog, Long> {
+public interface PriceAdjustmentLogRepository {
+    List<PriceAdjustmentLog> findByEventId(Long id);
+    PriceAdjustmentLog save(PriceAdjustmentLog l);
 }

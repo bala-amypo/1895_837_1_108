@@ -1,7 +1,12 @@
+
 package com.example.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.PricingRule;
+import java.util.*;
 
-public interface PricingRuleRepository extends JpaRepository<PricingRule, Long> {
+public interface PricingRuleRepository {
+    boolean existsByRuleCode(String code);
+    List<PricingRule> findByActiveTrue();
+    List<PricingRule> findAll();
+    PricingRule save(PricingRule r);
 }
