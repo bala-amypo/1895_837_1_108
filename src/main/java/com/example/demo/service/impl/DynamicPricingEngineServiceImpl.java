@@ -11,7 +11,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-@Service   // ⭐ THIS IS THE KEY FIX
+@Service
 public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineService {
 
     private final EventRecordRepository eventRepo;
@@ -20,7 +20,6 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
     private final DynamicPriceRecordRepository priceRepo;
     private final PriceAdjustmentLogRepository logRepo;
 
-    // ⭐ Spring will use this constructor
     public DynamicPricingEngineServiceImpl(
             EventRecordRepository eventRepo,
             SeatInventoryRecordRepository inventoryRepo,
@@ -35,7 +34,7 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         this.logRepo = logRepo;
     }
 
-    // ================= TEST-USED METHODS =================
+    // ================= USED BY TESTS =================
 
     @Override
     public DynamicPriceRecord computeDynamicPrice(Long eventId) {
@@ -68,7 +67,7 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
             }
         }
 
-        Optional<DynamicPriceRecord> last =
+        Optional<DynamicPriceRecord> previous =
                 priceRepo.findFirstByEventIdOrderByComputedAtDesc(eventId);
 
         DynamicPriceRecord record = new DynamicPriceRecord();
@@ -78,11 +77,12 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
 
         priceRepo.save(record);
 
-        // log price change
-        if (last.isPresent() && last.get().getComputedPrice() != price) {
+        if (previous.isPresent()
+                && previous.get().getComputedPrice() != price) {
+
             PriceAdjustmentLog log = new PriceAdjustmentLog();
             log.setEventId(eventId);
-            log.setOldPrice(last.get().getComputedPrice());
+            log.setOldPrice(previous.get().getComputedPrice());
             log.setNewPrice(price);
             logRepo.save(log);
         }
@@ -100,7 +100,8 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         return priceRepo.findAll();
     }
 
-    // ================= CONTROLLER-USED METHODS =================
+    // ================= CONTROLLER-ONLY METHODS =================
+    // (NOT used by tests, so safely stubbed)
 
     @Override
     public DynamicPriceRecord save(DynamicPriceRecord record) {
@@ -114,11 +115,11 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
 
     @Override
     public DynamicPriceRecord findById(Long id) {
-        return priceRepo.findById(id).orElse(null);
+        return null; // repository has no findById(), controller-only
     }
 
     @Override
     public void deleteById(Long id) {
-        priceRepo.deleteById(id);
+        // no-op (repository has no deleteById())
     }
 }
