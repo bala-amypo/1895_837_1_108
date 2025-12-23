@@ -4,14 +4,10 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DynamicPricingEngineService;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineService {
 
     private final EventRecordRepository eventRepo;
@@ -34,8 +30,6 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         this.logRepo = logRepo;
     }
 
-    // ================= USED BY TESTS =================
-
     @Override
     public DynamicPriceRecord computeDynamicPrice(Long eventId) {
 
@@ -50,44 +44,38 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
                 .orElseThrow(() -> new RuntimeException("Seat inventory not found"));
 
         double price = event.getBasePrice();
+        int daysLeft = (int) LocalDate.now().until(event.getEventDate()).getDays();
+
         List<PricingRule> rules = ruleRepo.findByActiveTrue();
-
-        long daysBeforeEvent =
-                ChronoUnit.DAYS.between(LocalDate.now(), event.getEventDate());
-
         StringBuilder appliedRules = new StringBuilder();
 
         for (PricingRule rule : rules) {
             if (inventory.getRemainingSeats() >= rule.getMinRemainingSeats()
                     && inventory.getRemainingSeats() <= rule.getMaxRemainingSeats()
-                    && daysBeforeEvent <= rule.getDaysBeforeEvent()) {
+                    && daysLeft <= rule.getDaysBeforeEvent()) {
 
                 price = price * rule.getPriceMultiplier();
                 appliedRules.append(rule.getRuleCode()).append(",");
             }
         }
 
-        Optional<DynamicPriceRecord> previous =
-                priceRepo.findFirstByEventIdOrderByComputedAtDesc(eventId);
-
         DynamicPriceRecord record = new DynamicPriceRecord();
         record.setEventId(eventId);
         record.setComputedPrice(price);
         record.setAppliedRuleCodes(appliedRules.toString());
 
-        priceRepo.save(record);
+        priceRepo.findFirstByEventIdOrderByComputedAtDesc(eventId)
+                .ifPresent(prev -> {
+                    if (!prev.getComputedPrice().equals(price)) {
+                        PriceAdjustmentLog log = new PriceAdjustmentLog();
+                        log.setEventId(eventId);
+                        log.setOldPrice(prev.getComputedPrice());
+                        log.setNewPrice(price);
+                        logRepo.save(log);
+                    }
+                });
 
-        if (previous.isPresent()
-                && previous.get().getComputedPrice() != price) {
-
-            PriceAdjustmentLog log = new PriceAdjustmentLog();
-            log.setEventId(eventId);
-            log.setOldPrice(previous.get().getComputedPrice());
-            log.setNewPrice(price);
-            logRepo.save(log);
-        }
-
-        return record;
+        return priceRepo.save(record);
     }
 
     @Override
@@ -100,9 +88,7 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         return priceRepo.findAll();
     }
 
-    // ================= CONTROLLER-ONLY METHODS =================
-    // (NOT used by tests, so safely stubbed)
-
+    // ===== Controller helpers =====
     @Override
     public DynamicPriceRecord save(DynamicPriceRecord record) {
         return priceRepo.save(record);
@@ -115,11 +101,12 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
 
     @Override
     public DynamicPriceRecord findById(Long id) {
-        return null; // repository has no findById(), controller-only
+        return priceRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Price record not found"));
     }
 
     @Override
     public void deleteById(Long id) {
-        // no-op (repository has no deleteById())
+        priceRepo.deleteById(id);
     }
 }
