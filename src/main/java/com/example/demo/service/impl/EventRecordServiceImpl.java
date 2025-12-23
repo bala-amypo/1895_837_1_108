@@ -10,67 +10,47 @@ import java.util.Optional;
 
 public class EventRecordServiceImpl implements EventRecordService {
 
-    private final EventRecordRepository repo;
+    private final EventRecordRepository repository;
 
-    public EventRecordServiceImpl(EventRecordRepository repo) {
-        this.repo = repo;
+    public EventRecordServiceImpl(EventRecordRepository repository) {
+        this.repository = repository;
     }
-
-    // ===== TEST METHODS =====
 
     @Override
     public EventRecord createEvent(EventRecord event) {
+
         if (event.getBasePrice() == null || event.getBasePrice() <= 0) {
             throw new BadRequestException("Base price must be > 0");
         }
-        if (repo.existsByEventCode(event.getEventCode())) {
+
+        if (repository.existsByEventCode(event.getEventCode())) {
             throw new BadRequestException("Event code already exists");
         }
-        return repo.save(event);
+
+        return repository.save(event);
     }
 
     @Override
     public EventRecord getEventById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
-    }
-
-    @Override
-    public Optional<EventRecord> getEventByCode(String eventCode) {
-        return repo.findByEventCode(eventCode);
+        return repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Event not found")
+        );
     }
 
     @Override
     public List<EventRecord> getAllEvents() {
-        return repo.findAll();
+        return repository.findAll();
     }
 
     @Override
     public EventRecord updateEventStatus(Long id, boolean active) {
         EventRecord event = getEventById(id);
         event.setActive(active);
-        return repo.save(event);
-    }
-
-    // ===== CONTROLLER METHODS =====
-
-    @Override
-    public EventRecord save(EventRecord event) {
-        return repo.save(event);
+        return repository.save(event);
     }
 
     @Override
-    public List<EventRecord> findAll() {
-        return repo.findAll();
-    }
-
-    @Override
-    public EventRecord findById(Long id) {
-        return repo.findById(id).orElse(null);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        // no-op
+    public Optional<EventRecord> getEventByCode(String eventCode) {
+        return repository.findByEventCode(eventCode);
     }
 }
