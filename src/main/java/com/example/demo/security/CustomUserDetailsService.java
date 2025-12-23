@@ -1,58 +1,54 @@
 package com.example.demo.security;
 
-import com.example.demo.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final Map<String, User> users = new HashMap<>();
-    private long idSequence = 1;
-
-    public CustomUserDetailsService() {
-    }
+    private final Map<String, Map<String, Object>> users = new HashMap<>();
+    private final AtomicLong idGenerator = new AtomicLong(1);
 
     public Map<String, Object> registerUser(
-            String fullName,
+            String name,
             String email,
-            String password,
+            String encodedPassword,
             String role) {
 
-        User user = new User();
-        user.setId(idSequence++);
-        user.setFullName(fullName);
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRole(role);
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userId", idGenerator.getAndIncrement());
+        userData.put("name", name);
+        userData.put("email", email);
+        userData.put("password", encodedPassword);
+        userData.put("role", role);
 
-        users.put(email, user);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("userId", user.getId());
-        response.put("role", user.getRole());
-
-        return response;
+        users.put(email, userData);
+        return userData;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        User user = users.get(email);
+        Map<String, Object> user = users.get(email);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
+        return new User(
+                (String) user.get("email"),
+                (String) user.get("password"),
                 Collections.singletonList(
-                        new SimpleGrantedAuthority(user.getRole()))
+                        new SimpleGrantedAuthority(
+                                "ROLE_" + user.get("role")
+                        )
+                )
         );
     }
 }
