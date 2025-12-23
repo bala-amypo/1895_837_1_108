@@ -9,54 +9,33 @@ import java.util.List;
 
 public class PricingRuleServiceImpl implements PricingRuleService {
 
-    private final PricingRuleRepository repo;
+    private final PricingRuleRepository repository;
 
-    public PricingRuleServiceImpl(PricingRuleRepository repo) {
-        this.repo = repo;
+    public PricingRuleServiceImpl(PricingRuleRepository repository) {
+        this.repository = repository;
     }
-
-    // ===== TEST METHODS =====
 
     @Override
     public PricingRule createRule(PricingRule rule) {
+
         if (rule.getPriceMultiplier() == null || rule.getPriceMultiplier() <= 0) {
             throw new BadRequestException("Price multiplier must be > 0");
         }
-        if (repo.existsByRuleCode(rule.getRuleCode())) {
+
+        if (repository.existsByRuleCode(rule.getRuleCode())) {
             throw new BadRequestException("Rule code already exists");
         }
-        return repo.save(rule);
-    }
 
-    @Override
-    public List<PricingRule> getActiveRules() {
-        return repo.findByActiveTrue();
+        return repository.save(rule);
     }
 
     @Override
     public List<PricingRule> getAllRules() {
-        return repo.findAll();
-    }
-
-    // ===== CONTROLLER METHODS =====
-
-    @Override
-    public PricingRule save(PricingRule rule) {
-        return repo.save(rule);
+        return repository.findAll();
     }
 
     @Override
-    public List<PricingRule> findAll() {
-        return repo.findAll();
-    }
-
-    @Override
-    public PricingRule findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        // no-op
+    public List<PricingRule> getActiveRules() {
+        return repository.findByActiveTrue();
     }
 }
