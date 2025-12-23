@@ -1,14 +1,14 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.SeatInventoryRecord;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
-public interface SeatInventoryRecordRepository {
+@Repository
+public interface SeatInventoryRecordRepository
+        extends JpaRepository<SeatInventoryRecord, Long> {
 
     Optional<SeatInventoryRecord> findByEventId(Long eventId);
-
-    List<SeatInventoryRecord> findAll();
-
-    SeatInventoryRecord save(SeatInventoryRecord inventory);
 }
