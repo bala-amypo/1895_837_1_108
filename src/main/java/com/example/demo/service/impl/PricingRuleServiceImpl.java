@@ -40,20 +40,4 @@ public class PricingRuleServiceImpl implements PricingRuleService {
     public List<PricingRule> getActiveRules() {
         return repository.findByActiveTrue();
     }
-
-    // Controller support
-    @Override
-    public PricingRule save(PricingRule rule) {
-        return repository.save(rule);
-    }
-
-    @Override
-    public PricingRule findById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
 }
