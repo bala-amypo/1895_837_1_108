@@ -1,14 +1,34 @@
-package com.example.demo.repository;
+package com.example.demo.model;
 
-import com.example.demo.model.PriceAdjustmentLog;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-import java.util.List;
+@Entity
+public class PriceAdjustmentLog {
 
-@Repository
-public interface PriceAdjustmentLogRepository
-        extends JpaRepository<PriceAdjustmentLog, Long> {
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    List<PriceAdjustmentLog> findByEventId(Long eventId);
+    private Long eventId;
+    private Double oldPrice;
+    private Double newPrice;
+    private LocalDateTime changedAt;
+
+    @PrePersist
+    public void prePersist() {
+        changedAt = LocalDateTime.now();
+    }
+
+    // getters & setters
+    public Long getEventId() { return eventId; }
+    public void setEventId(Long eventId) { this.eventId = eventId; }
+
+    public Double getOldPrice() { return oldPrice; }
+    public void setOldPrice(Double oldPrice) { this.oldPrice = oldPrice; }
+
+    public Double getNewPrice() { return newPrice; }
+    public void setNewPrice(Double newPrice) { this.newPrice = newPrice; }
+
+    public LocalDateTime getChangedAt() { return changedAt; }
 }
