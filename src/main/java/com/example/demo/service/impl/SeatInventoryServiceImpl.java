@@ -6,63 +6,35 @@ import com.example.demo.repository.EventRecordRepository;
 import com.example.demo.repository.SeatInventoryRecordRepository;
 import com.example.demo.service.SeatInventoryService;
 
-import java.util.List;
-
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
-    private final SeatInventoryRecordRepository repo;
+    private final SeatInventoryRecordRepository inventoryRepo;
     private final EventRecordRepository eventRepo;
 
     public SeatInventoryServiceImpl(
-            SeatInventoryRecordRepository repo,
+            SeatInventoryRecordRepository inventoryRepo,
             EventRecordRepository eventRepo) {
-        this.repo = repo;
+
+        this.inventoryRepo = inventoryRepo;
         this.eventRepo = eventRepo;
     }
 
-    // ===== TEST METHODS =====
-
     @Override
-    public SeatInventoryRecord createInventory(SeatInventoryRecord inv) {
-        eventRepo.findById(inv.getEventId())
+    public SeatInventoryRecord createInventory(SeatInventoryRecord inventory) {
+
+        eventRepo.findById(inventory.getEventId())
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        if (inv.getRemainingSeats() > inv.getTotalSeats()) {
+        if (inventory.getRemainingSeats() > inventory.getTotalSeats()) {
             throw new BadRequestException("Remaining seats cannot exceed total seats");
         }
-        return repo.save(inv);
+
+        return inventoryRepo.save(inventory);
     }
 
     @Override
     public SeatInventoryRecord getInventoryByEvent(Long eventId) {
-        return repo.findByEventId(eventId)
+        return inventoryRepo.findByEventId(eventId)
                 .orElseThrow(() -> new RuntimeException("Seat inventory not found"));
-    }
-
-    @Override
-    public List<SeatInventoryRecord> getAllInventories() {
-        return repo.findAll();
-    }
-
-    // ===== CONTROLLER METHODS =====
-
-    @Override
-    public SeatInventoryRecord save(SeatInventoryRecord inv) {
-        return repo.save(inv);
-    }
-
-    @Override
-    public List<SeatInventoryRecord> findAll() {
-        return repo.findAll();
-    }
-
-    @Override
-    public SeatInventoryRecord findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        // no-op
     }
 }
