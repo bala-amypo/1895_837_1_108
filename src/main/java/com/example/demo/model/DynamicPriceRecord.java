@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,25 +11,50 @@ public class DynamicPriceRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long eventId;
     private Double computedPrice;
+    private String appliedRuleCodes;
     private LocalDateTime computedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    @JsonBackReference
-    private EventRecord event;
-
-    @PrePersist
-    public void setComputedAt() {
-        computedAt = LocalDateTime.now();
+    public DynamicPriceRecord() {
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @PrePersist
+    public void prePersist() {
+        this.computedAt = LocalDateTime.now();
+    }
 
-    public Double getComputedPrice() { return computedPrice; }
-    public void setComputedPrice(Double computedPrice) { this.computedPrice = computedPrice; }
+    // -------- getters & setters --------
 
-    public EventRecord getEvent() { return event; }
-    public void setEvent(EventRecord event) { this.event = event; }
+    public Long getId() {
+        return id;
+    }
+
+    public Long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+
+    public Double getComputedPrice() {
+        return computedPrice;
+    }
+
+    public void setComputedPrice(Double computedPrice) {
+        this.computedPrice = computedPrice;
+    }
+
+    public String getAppliedRuleCodes() {
+        return appliedRuleCodes;
+    }
+
+    public void setAppliedRuleCodes(String appliedRuleCodes) {
+        this.appliedRuleCodes = appliedRuleCodes;
+    }
+
+    public LocalDateTime getComputedAt() {
+        return computedAt;
+    }
 }

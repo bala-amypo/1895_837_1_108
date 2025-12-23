@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,30 +11,51 @@ public class SeatInventoryRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long eventId;
     private Integer totalSeats;
     private Integer remainingSeats;
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    @JsonBackReference
-    private EventRecord event;
+    public SeatInventoryRecord() {
+    }
 
     @PrePersist
     @PreUpdate
-    public void setUpdatedAt() {
-        updatedAt = LocalDateTime.now();
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // -------- getters & setters --------
 
-    public Integer getTotalSeats() { return totalSeats; }
-    public void setTotalSeats(Integer totalSeats) { this.totalSeats = totalSeats; }
+    public Long getId() {
+        return id;
+    }
 
-    public Integer getRemainingSeats() { return remainingSeats; }
-    public void setRemainingSeats(Integer remainingSeats) { this.remainingSeats = remainingSeats; }
+    public Long getEventId() {
+        return eventId;
+    }
 
-    public EventRecord getEvent() { return event; }
-    public void setEvent(EventRecord event) { this.event = event; }
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+
+    public Integer getTotalSeats() {
+        return totalSeats;
+    }
+
+    public void setTotalSeats(Integer totalSeats) {
+        this.totalSeats = totalSeats;
+    }
+
+    public Integer getRemainingSeats() {
+        return remainingSeats;
+    }
+
+    public void setRemainingSeats(Integer remainingSeats) {
+        this.remainingSeats = remainingSeats;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
 }
