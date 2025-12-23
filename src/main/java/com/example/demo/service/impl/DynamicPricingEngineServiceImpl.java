@@ -7,7 +7,8 @@ import com.example.demo.service.DynamicPricingEngineService;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineService {
 
@@ -31,7 +32,7 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         this.logRepo = logRepo;
     }
 
-    // ===== Test-used methods =====
+    // ===== TEST METHODS =====
 
     @Override
     public DynamicPriceRecord computeDynamicPrice(Long eventId) {
@@ -96,11 +97,11 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         return priceRepo.findAll();
     }
 
-    // ===== Controller-required CRUD methods =====
+    // ===== CONTROLLER METHODS =====
 
     @Override
-    public DynamicPriceRecord save(DynamicPriceRecord r) {
-        return priceRepo.save(r);
+    public DynamicPriceRecord save(DynamicPriceRecord record) {
+        return priceRepo.save(record);
     }
 
     @Override
@@ -109,8 +110,8 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
     }
 
     @Override
-    public Optional<DynamicPriceRecord> findById(Long id) {
-        return Optional.empty();
+    public DynamicPriceRecord findById(Long id) {
+        return null;
     }
 
     @Override

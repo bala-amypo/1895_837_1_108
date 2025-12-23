@@ -5,7 +5,6 @@ import com.example.demo.repository.PriceAdjustmentLogRepository;
 import com.example.demo.service.PriceAdjustmentLogService;
 
 import java.util.List;
-import java.util.Optional;
 
 public class PriceAdjustmentLogServiceImpl implements PriceAdjustmentLogService {
 
@@ -15,14 +14,14 @@ public class PriceAdjustmentLogServiceImpl implements PriceAdjustmentLogService 
         this.repo = repo;
     }
 
-    // ===== Test-used =====
+    // ===== TEST METHOD =====
 
     @Override
     public List<PriceAdjustmentLog> getAdjustmentsByEvent(Long eventId) {
         return repo.findByEventId(eventId);
     }
 
-    // ===== Controller-required =====
+    // ===== CONTROLLER METHODS =====
 
     @Override
     public PriceAdjustmentLog save(PriceAdjustmentLog log) {
@@ -31,12 +30,12 @@ public class PriceAdjustmentLogServiceImpl implements PriceAdjustmentLogService 
 
     @Override
     public List<PriceAdjustmentLog> findAll() {
-        return List.of(); // repository has no findAll; controller only needs compile
+        return List.of();
     }
 
     @Override
-    public Optional<PriceAdjustmentLog> findById(Long id) {
-        return Optional.empty();
+    public PriceAdjustmentLog findById(Long id) {
+        return null;
     }
 
     @Override
