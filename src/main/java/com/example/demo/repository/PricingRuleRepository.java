@@ -1,12 +1,15 @@
-
 package com.example.demo.repository;
 
 import com.example.demo.model.PricingRule;
-import java.util.*;
+import java.util.List;
 
 public interface PricingRuleRepository {
-    boolean existsByRuleCode(String code);
+
+    boolean existsByRuleCode(String ruleCode);
+
     List<PricingRule> findByActiveTrue();
+
     List<PricingRule> findAll();
-    PricingRule save(PricingRule r);
+
+    PricingRule save(PricingRule rule);
 }

@@ -4,8 +4,10 @@ import com.example.demo.model.SeatInventoryRecord;
 import java.util.List;
 
 public interface SeatInventoryService {
-    SeatInventoryRecord save(SeatInventoryRecord inventory);
-    List<SeatInventoryRecord> findAll();
-    SeatInventoryRecord findById(Long id);
-    void deleteById(Long id);
+
+    SeatInventoryRecord createInventory(SeatInventoryRecord inventory);
+
+    SeatInventoryRecord getInventoryByEvent(Long eventId);
+
+    List<SeatInventoryRecord> getAllInventories();
 }
