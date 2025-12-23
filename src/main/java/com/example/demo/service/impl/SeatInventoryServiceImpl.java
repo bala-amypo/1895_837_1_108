@@ -2,40 +2,45 @@ package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SeatInventoryRecord;
+import com.example.demo.repository.EventRecordRepository;
 import com.example.demo.repository.SeatInventoryRecordRepository;
 import com.example.demo.service.SeatInventoryService;
-import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-@Service
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
-    private final SeatInventoryRecordRepository repository;
+    private final SeatInventoryRecordRepository inventoryRepository;
+    private final EventRecordRepository eventRepository;
 
-    public SeatInventoryServiceImpl(SeatInventoryRecordRepository repository) {
-        this.repository = repository;
+    public SeatInventoryServiceImpl(
+            SeatInventoryRecordRepository inventoryRepository,
+            EventRecordRepository eventRepository) {
+        this.inventoryRepository = inventoryRepository;
+        this.eventRepository = eventRepository;
     }
 
     @Override
-    public SeatInventoryRecord save(SeatInventoryRecord inventory) {
+    public SeatInventoryRecord createInventory(SeatInventoryRecord inventory) {
+
+        eventRepository.findById(inventory.getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
         if (inventory.getRemainingSeats() > inventory.getTotalSeats()) {
             throw new BadRequestException("Remaining seats cannot exceed total seats");
         }
-        return repository.save(inventory);
+
+        return inventoryRepository.save(inventory);
     }
 
     @Override
-    public List<SeatInventoryRecord> findAll() {
-        return repository.findAll();
+    public SeatInventoryRecord getInventoryByEvent(Long eventId) {
+        return inventoryRepository.findByEventId(eventId)
+                .orElseThrow(() -> new RuntimeException("Seat inventory not found"));
     }
 
     @Override
-    public SeatInventoryRecord findById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public List<SeatInventoryRecord> getAllInventories() {
+        return inventoryRepository.findAll();
     }
 }
