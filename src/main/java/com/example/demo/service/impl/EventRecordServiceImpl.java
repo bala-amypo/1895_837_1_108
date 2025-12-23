@@ -16,7 +16,7 @@ public class EventRecordServiceImpl implements EventRecordService {
         this.repo = repo;
     }
 
-    // ===== Test-used methods =====
+    // ===== TEST METHODS =====
 
     @Override
     public EventRecord createEvent(EventRecord event) {
@@ -36,8 +36,8 @@ public class EventRecordServiceImpl implements EventRecordService {
     }
 
     @Override
-    public Optional<EventRecord> getEventByCode(String code) {
-        return repo.findByEventCode(code);
+    public Optional<EventRecord> getEventByCode(String eventCode) {
+        return repo.findByEventCode(eventCode);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class EventRecordServiceImpl implements EventRecordService {
         return repo.save(event);
     }
 
-    // ===== Controller-required CRUD methods =====
+    // ===== CONTROLLER METHODS =====
 
     @Override
     public EventRecord save(EventRecord event) {
@@ -65,12 +65,12 @@ public class EventRecordServiceImpl implements EventRecordService {
     }
 
     @Override
-    public Optional<EventRecord> findById(Long id) {
-        return repo.findById(id);
+    public EventRecord findById(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
     @Override
     public void deleteById(Long id) {
-        // no-op (repository has no delete; tests don’t require it)
+        // no-op
     }
 }

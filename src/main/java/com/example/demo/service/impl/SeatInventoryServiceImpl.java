@@ -7,7 +7,6 @@ import com.example.demo.repository.SeatInventoryRecordRepository;
 import com.example.demo.service.SeatInventoryService;
 
 import java.util.List;
-import java.util.Optional;
 
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
@@ -21,7 +20,7 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
         this.eventRepo = eventRepo;
     }
 
-    // ===== Test-used methods =====
+    // ===== TEST METHODS =====
 
     @Override
     public SeatInventoryRecord createInventory(SeatInventoryRecord inv) {
@@ -45,7 +44,7 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
         return repo.findAll();
     }
 
-    // ===== Controller-required CRUD methods =====
+    // ===== CONTROLLER METHODS =====
 
     @Override
     public SeatInventoryRecord save(SeatInventoryRecord inv) {
@@ -58,8 +57,8 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     }
 
     @Override
-    public Optional<SeatInventoryRecord> findById(Long id) {
-        return Optional.empty(); // repository has no findById, controller only needs compile
+    public SeatInventoryRecord findById(Long id) {
+        return null;
     }
 
     @Override

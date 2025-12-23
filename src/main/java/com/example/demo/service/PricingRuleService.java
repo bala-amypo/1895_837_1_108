@@ -1,19 +1,19 @@
 package com.example.demo.service;
 
 import com.example.demo.model.PricingRule;
+
 import java.util.List;
-import java.util.Optional;
 
 public interface PricingRuleService {
 
-    // test-used
+    // ===== Used by TESTS =====
     PricingRule createRule(PricingRule rule);
     List<PricingRule> getActiveRules();
     List<PricingRule> getAllRules();
 
-    // controller-used
+    // ===== Used by CONTROLLERS =====
     PricingRule save(PricingRule rule);
     List<PricingRule> findAll();
-    Optional<PricingRule> findById(Long id);
+    PricingRule findById(Long id);
     void deleteById(Long id);
 }

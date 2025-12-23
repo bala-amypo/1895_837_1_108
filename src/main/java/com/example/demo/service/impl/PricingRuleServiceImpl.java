@@ -6,7 +6,6 @@ import com.example.demo.repository.PricingRuleRepository;
 import com.example.demo.service.PricingRuleService;
 
 import java.util.List;
-import java.util.Optional;
 
 public class PricingRuleServiceImpl implements PricingRuleService {
 
@@ -16,7 +15,7 @@ public class PricingRuleServiceImpl implements PricingRuleService {
         this.repo = repo;
     }
 
-    // ===== Test-used methods =====
+    // ===== TEST METHODS =====
 
     @Override
     public PricingRule createRule(PricingRule rule) {
@@ -39,7 +38,7 @@ public class PricingRuleServiceImpl implements PricingRuleService {
         return repo.findAll();
     }
 
-    // ===== Controller-required CRUD methods =====
+    // ===== CONTROLLER METHODS =====
 
     @Override
     public PricingRule save(PricingRule rule) {
@@ -52,8 +51,8 @@ public class PricingRuleServiceImpl implements PricingRuleService {
     }
 
     @Override
-    public Optional<PricingRule> findById(Long id) {
-        return Optional.empty();
+    public PricingRule findById(Long id) {
+        return null;
     }
 
     @Override
