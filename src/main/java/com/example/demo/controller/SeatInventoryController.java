@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.SeatInventoryRecord;
-import com.example.demo.service.SeatInventoryService;
+import com.example.demo.repository.SeatInventoryRecordRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,14 +10,14 @@ import java.util.List;
 @RequestMapping("/api/inventory")
 public class SeatInventoryController {
 
-    private final SeatInventoryService inventoryService;
+    private final SeatInventoryRecordRepository inventoryRepository;
 
-    public SeatInventoryController(SeatInventoryService inventoryService) {
-        this.inventoryService = inventoryService;
+    public SeatInventoryController(SeatInventoryRecordRepository inventoryRepository) {
+        this.inventoryRepository = inventoryRepository;
     }
 
     @GetMapping("/event/{eventId}")
     public List<SeatInventoryRecord> getInventoryByEvent(@PathVariable Long eventId) {
-        return inventoryService.getInventoryByEventId(eventId);
+        return inventoryRepository.findByEventId(eventId);
     }
 }
