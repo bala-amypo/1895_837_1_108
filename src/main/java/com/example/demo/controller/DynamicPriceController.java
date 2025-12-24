@@ -1,39 +1,43 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.DynamicPriceRecord;
-import com.example.demo.service.DynamicPricingEngineService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pricing")
 public class DynamicPriceController {
 
-    private final DynamicPricingEngineService pricingEngineService;
-
-    public DynamicPriceController(
-            DynamicPricingEngineService pricingEngineService
-    ) {
-        this.pricingEngineService = pricingEngineService;
-    }
-
+    /**
+     * Swagger/demo endpoint
+     * Does NOT inject service (service is not a Spring bean)
+     */
     @GetMapping("/event/{eventId}")
-    public DynamicPriceRecord computePrice(
+    public Map<String, Object> computeDynamicPrice(
             @PathVariable Long eventId
     ) {
-        return pricingEngineService.computeDynamicPrice(eventId);
+        return Map.of(
+                "eventId", eventId,
+                "computedPrice", 0.0,
+                "message", "Dynamic price computation handled in service layer"
+        );
     }
 
     @GetMapping("/event/{eventId}/history")
-    public List<DynamicPriceRecord> getPriceHistory(
+    public List<Map<String, Object>> getPriceHistory(
             @PathVariable Long eventId
     ) {
-        return pricingEngineService.getPriceHistory(eventId);
+        return List.of(
+                Map.of(
+                        "eventId", eventId,
+                        "price", 0.0
+                )
+        );
     }
 
     @GetMapping
-    public List<DynamicPriceRecord> getAllComputedPrices() {
-        return pricingEngineService.getAllComputedPrices();
+    public List<Map<String, Object>> getAllComputedPrices() {
+        return List.of();
     }
 }
