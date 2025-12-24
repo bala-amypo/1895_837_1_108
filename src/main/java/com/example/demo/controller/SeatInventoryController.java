@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.SeatInventoryRecord;
-import com.example.demo.service.SeatInventoryRecordService;
+import com.example.demo.service.SeatInventoryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 @RequestMapping("/api/inventory")
 public class SeatInventoryController {
 
-    private final SeatInventoryRecordService inventoryService;
+    private final SeatInventoryService inventoryService;
 
-    public SeatInventoryController(SeatInventoryRecordService inventoryService) {
+    public SeatInventoryController(SeatInventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
 
