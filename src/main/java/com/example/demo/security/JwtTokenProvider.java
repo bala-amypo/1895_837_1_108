@@ -1,8 +1,12 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.Authentication;
-import java.util.*;
+
+import java.util.Date;
+import java.util.Map;
 
 public class JwtTokenProvider {
 
@@ -28,23 +32,27 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    // ✅ FIXED FOR jjwt 0.9.1
     public String getUsernameFromToken(String token) {
-        return getAllClaims(token).get("email", String.class);
+        return (String) getAllClaims(token).get("email");
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token);
             return true;
-        } catch (Exception e) {
+        } catch (Exception ex) {
             return false;
         }
     }
 
     public Map<String, Object> getAllClaims(String token) {
-        return Jwts.parser()
+        Claims claims = Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
+        return claims;
     }
 }
