@@ -10,12 +10,19 @@ public class SeatInventoryController {
 
     @GetMapping("/event/{eventId}")
     public String getInventoryByEvent(@PathVariable Long eventId) {
-        return "Seat inventory fetched for eventId = " + eventId;
+        return "Fetched seat inventory for eventId = " + eventId;
     }
 
-    // ✅ POST
     @PostMapping
-    public String addInventory(@RequestBody Map<String, Object> inventoryData) {
-        return "Seat inventory added: " + inventoryData;
+    public String createInventory(@RequestBody Map<String, Object> inventory) {
+
+        Long eventId = Long.valueOf(inventory.get("eventId").toString());
+        Integer totalSeats = Integer.valueOf(inventory.get("totalSeats").toString());
+        Integer remainingSeats = Integer.valueOf(inventory.get("remainingSeats").toString());
+
+        return "Seat inventory created: " +
+                "eventId=" + eventId +
+                ", totalSeats=" + totalSeats +
+                ", remainingSeats=" + remainingSeats;
     }
 }
