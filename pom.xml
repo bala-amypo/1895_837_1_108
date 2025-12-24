@@ -56,11 +56,26 @@
 
         <!-- ================= JWT ================= -->
 
-        <!-- IMPORTANT: Compatible with your JwtTokenProvider code -->
+        <!-- JJWT 0.9.1 (compatible with your JwtTokenProvider code) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
+        </dependency>
+
+        <!-- ================= JAXB (CRITICAL FIX) ================= -->
+        <!-- REQUIRED for jjwt 0.9.1 on Java 11+ -->
+
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>4.0.5</version>
         </dependency>
 
         <!-- ================= SWAGGER ================= -->
@@ -100,6 +115,7 @@
     <build>
         <plugins>
 
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
