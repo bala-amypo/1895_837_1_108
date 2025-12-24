@@ -1,5 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.security.CustomUserDetailsService;
+import com.example.demo.security.JwtTokenProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -8,12 +13,40 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public AuthController(
+            AuthenticationManager authenticationManager,
+            JwtTokenProvider jwtTokenProvider,
+            CustomUserDetailsService customUserDetailsService
+    ) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.customUserDetailsService = customUserDetailsService;
+    }
+
     @PostMapping("/token")
-    public String generateToken(@RequestBody Map<String, String> login) {
+    public Map<String, String> login(
+            @RequestParam String email,
+            @RequestParam String password
+    ) {
+        Authentication authentication =
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(email, password)
+                );
 
-        String username = login.get("username");
-        String password = login.get("password");
+        Map<String, Object> user =
+                customUserDetailsService.getUserByEmail(email);
 
-        return "Token generated successfully for user: " + username;
+        String token =
+                jwtTokenProvider.generateToken(
+                        authentication,
+                        (Long) user.get("userId"),
+                        (String) user.get("role")
+                );
+
+        return Map.of("token", token);
     }
 }

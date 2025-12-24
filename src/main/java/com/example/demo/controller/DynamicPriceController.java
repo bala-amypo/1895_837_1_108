@@ -1,31 +1,39 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.DynamicPriceRecord;
+import com.example.demo.service.DynamicPricingEngineService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/pricing")
 public class DynamicPriceController {
 
-    @GetMapping("/event/{eventId}")
-    public String getDynamicPrice(@PathVariable Long eventId) {
-        return "Dynamic price calculated for eventId = " + eventId;
+    private final DynamicPricingEngineService pricingEngineService;
+
+    public DynamicPriceController(
+            DynamicPricingEngineService pricingEngineService
+    ) {
+        this.pricingEngineService = pricingEngineService;
     }
 
-    @PostMapping
-    public String calculatePrice(@RequestBody Map<String, Object> pricing) {
+    @GetMapping("/event/{eventId}")
+    public DynamicPriceRecord computePrice(
+            @PathVariable Long eventId
+    ) {
+        return pricingEngineService.computeDynamicPrice(eventId);
+    }
 
-        Long eventId = Long.valueOf(pricing.get("eventId").toString());
-        Double basePrice = Double.valueOf(pricing.get("basePrice").toString());
-        Integer remainingSeats = Integer.valueOf(pricing.get("remainingSeats").toString());
-        Integer daysBeforeEvent = Integer.valueOf(pricing.get("daysBeforeEvent").toString());
-        Double multiplier = Double.valueOf(pricing.get("priceMultiplier").toString());
+    @GetMapping("/event/{eventId}/history")
+    public List<DynamicPriceRecord> getPriceHistory(
+            @PathVariable Long eventId
+    ) {
+        return pricingEngineService.getPriceHistory(eventId);
+    }
 
-        Double finalPrice = basePrice * multiplier;
-
-        return "Dynamic price calculated: " +
-                "eventId=" + eventId +
-                ", finalPrice=" + finalPrice;
+    @GetMapping
+    public List<DynamicPriceRecord> getAllComputedPrices() {
+        return pricingEngineService.getAllComputedPrices();
     }
 }
