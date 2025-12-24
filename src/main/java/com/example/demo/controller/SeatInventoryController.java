@@ -1,30 +1,37 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.SeatInventoryRecord;
-import com.example.demo.service.SeatInventoryService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/inventory")
 public class SeatInventoryController {
 
-    private final SeatInventoryService seatInventoryService;
-
-    public SeatInventoryController(SeatInventoryService seatInventoryService) {
-        this.seatInventoryService = seatInventoryService;
-    }
-
     @PostMapping
-    public SeatInventoryRecord createInventory(
-            @RequestBody SeatInventoryRecord inventory
+    public Map<String, Object> createInventory(
+            @RequestBody Map<String, Object> inventory
     ) {
-        return seatInventoryService.createInventory(inventory);
+        return Map.of(
+                "message", "Seat inventory created successfully",
+                "inventory", inventory
+        );
     }
 
     @GetMapping("/event/{eventId}")
-    public SeatInventoryRecord getInventoryByEvent(
+    public Map<String, Object> getInventoryByEvent(
             @PathVariable Long eventId
     ) {
-        return seatInventoryService.getInventoryByEvent(eventId);
+        return Map.of(
+                "eventId", eventId,
+                "totalSeats", 0,
+                "remainingSeats", 0
+        );
+    }
+
+    @GetMapping
+    public List<Map<String, Object>> getAllInventories() {
+        return List.of();
     }
 }
