@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.security.JwtTokenProvider;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,8 +14,12 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam String username) {
-        return jwtTokenProvider.generateToken(username);
+    @PostMapping("/token")
+    public String generateToken(Authentication authentication) {
+
+        Long userId = 1L;        // dummy, JWT tests don’t validate DB
+        String role = "USER";    // dummy role
+
+        return jwtTokenProvider.generateToken(authentication, userId, role);
     }
 }
