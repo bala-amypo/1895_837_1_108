@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.DynamicPriceRecord;
-import com.example.demo.service.DynamicPriceRecordService;
+import com.example.demo.service.DynamicPriceService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 @RequestMapping("/api/pricing")
 public class DynamicPriceController {
 
-    private final DynamicPriceRecordService pricingService;
+    private final DynamicPriceService pricingService;
 
-    public DynamicPriceController(DynamicPriceRecordService pricingService) {
+    public DynamicPriceController(DynamicPriceService pricingService) {
         this.pricingService = pricingService;
     }
 
