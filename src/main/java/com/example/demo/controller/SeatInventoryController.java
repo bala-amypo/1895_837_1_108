@@ -4,7 +4,7 @@ import com.example.demo.model.SeatInventoryRecord;
 import com.example.demo.repository.SeatInventoryRecordRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -17,7 +17,7 @@ public class SeatInventoryController {
     }
 
     @GetMapping("/event/{eventId}")
-    public List<SeatInventoryRecord> getInventoryByEvent(@PathVariable Long eventId) {
+    public Optional<SeatInventoryRecord> getInventoryByEvent(@PathVariable Long eventId) {
         return inventoryRepository.findByEventId(eventId);
     }
 }
