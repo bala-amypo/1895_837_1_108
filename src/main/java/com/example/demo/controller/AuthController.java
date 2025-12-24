@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,37 +14,35 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CustomUserDetailsService customUserDetailsService;
 
     public AuthController(
             AuthenticationManager authenticationManager,
-            JwtTokenProvider jwtTokenProvider,
-            CustomUserDetailsService customUserDetailsService
+            JwtTokenProvider jwtTokenProvider
     ) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.customUserDetailsService = customUserDetailsService;
     }
 
+    /**
+     * Swagger / Manual login endpoint
+     * NOTE: userId and role are passed directly
+     * (matches existing security code, no service changes)
+     */
     @PostMapping("/token")
     public Map<String, String> login(
             @RequestParam String email,
-            @RequestParam String password
+            @RequestParam String password,
+            @RequestParam Long userId,
+            @RequestParam String role
     ) {
+
         Authentication authentication =
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(email, password)
                 );
 
-        Map<String, Object> user =
-                customUserDetailsService.getUserByEmail(email);
-
         String token =
-                jwtTokenProvider.generateToken(
-                        authentication,
-                        (Long) user.get("userId"),
-                        (String) user.get("role")
-                );
+                jwtTokenProvider.generateToken(authentication, userId, role);
 
         return Map.of("token", token);
     }
