@@ -8,6 +8,6 @@ public class AuthController {
 
     @PostMapping("/token")
     public String token() {
-        return "JWT generation handled internally";
+        return "Authentication handled internally";
     }
 }
