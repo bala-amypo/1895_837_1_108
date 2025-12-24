@@ -5,24 +5,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/inventory")
-public class SeatInventoryController {
+@RequestMapping("/api/pricing")
+public class DynamicPriceController {
 
     @GetMapping("/event/{eventId}")
-    public String getInventoryByEvent(@PathVariable Long eventId) {
-        return "Fetched seat inventory for eventId = " + eventId;
+    public String getDynamicPrice(@PathVariable Long eventId) {
+        return "Dynamic price calculated for eventId = " + eventId;
     }
 
     @PostMapping
-    public String createInventory(@RequestBody Map<String, Object> inventory) {
+    public String calculatePrice(@RequestBody Map<String, Object> pricing) {
 
-        Long eventId = Long.valueOf(inventory.get("eventId").toString());
-        Integer totalSeats = Integer.valueOf(inventory.get("totalSeats").toString());
-        Integer remainingSeats = Integer.valueOf(inventory.get("remainingSeats").toString());
+        Long eventId = Long.valueOf(pricing.get("eventId").toString());
+        Double basePrice = Double.valueOf(pricing.get("basePrice").toString());
+        Integer remainingSeats = Integer.valueOf(pricing.get("remainingSeats").toString());
+        Integer daysBeforeEvent = Integer.valueOf(pricing.get("daysBeforeEvent").toString());
+        Double multiplier = Double.valueOf(pricing.get("priceMultiplier").toString());
 
-        return "Seat inventory created: " +
+        Double finalPrice = basePrice * multiplier;
+
+        return "Dynamic price calculated: " +
                 "eventId=" + eventId +
-                ", totalSeats=" + totalSeats +
-                ", remainingSeats=" + remainingSeats;
+                ", finalPrice=" + finalPrice;
     }
 }
