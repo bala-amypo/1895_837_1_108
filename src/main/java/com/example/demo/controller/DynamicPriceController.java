@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.DynamicPriceRecord;
-import com.example.demo.service.DynamicPriceService;
+import com.example.demo.repository.DynamicPriceRecordRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,14 +10,14 @@ import java.util.List;
 @RequestMapping("/api/pricing")
 public class DynamicPriceController {
 
-    private final DynamicPriceService pricingService;
+    private final DynamicPriceRecordRepository priceRepository;
 
-    public DynamicPriceController(DynamicPriceService pricingService) {
-        this.pricingService = pricingService;
+    public DynamicPriceController(DynamicPriceRecordRepository priceRepository) {
+        this.priceRepository = priceRepository;
     }
 
     @GetMapping("/event/{eventId}")
     public List<DynamicPriceRecord> getPricesByEvent(@PathVariable Long eventId) {
-        return pricingService.getPricesByEventId(eventId);
+        return priceRepository.findByEventId(eventId);
     }
 }
