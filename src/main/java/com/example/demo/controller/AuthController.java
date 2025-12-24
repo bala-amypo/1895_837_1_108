@@ -12,22 +12,20 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final JwtTokenProvider jwtTokenProvider;
-
-    public AuthController(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
-    /**
-     * Simple token generation endpoint for Swagger/demo
-     * No AuthenticationManager required
-     */
     @PostMapping("/token")
     public Map<String, String> generateToken(
             @RequestParam String email,
             @RequestParam Long userId,
             @RequestParam String role
     ) {
+
+        // Same way as in your TESTS
+        JwtTokenProvider jwtTokenProvider =
+                new JwtTokenProvider(
+                        "VerySecretKeyForJwtDemoApplication123456",
+                        3600000L,
+                        true
+                );
 
         Authentication auth =
                 new UsernamePasswordAuthenticationToken(
