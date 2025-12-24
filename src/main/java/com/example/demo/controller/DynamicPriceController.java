@@ -5,6 +5,7 @@ import com.example.demo.repository.DynamicPriceRecordRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/pricing")
@@ -18,6 +19,9 @@ public class DynamicPriceController {
 
     @GetMapping("/event/{eventId}")
     public List<DynamicPriceRecord> getPricesByEvent(@PathVariable Long eventId) {
-        return priceRepository.findByEventId(eventId);
+        return priceRepository.findAll()
+                .stream()
+                .filter(p -> p.getEventId().equals(eventId))
+                .collect(Collectors.toList());
     }
 }
