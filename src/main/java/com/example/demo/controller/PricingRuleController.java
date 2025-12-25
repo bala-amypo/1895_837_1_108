@@ -1,31 +1,33 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.PricingRule;
+import com.example.demo.service.PricingRuleService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/rules")
 public class PricingRuleController {
 
+    private final PricingRuleService service;
+
+    public PricingRuleController(PricingRuleService service) {
+        this.service = service;
+    }
+
     @PostMapping
-    public Map<String, Object> createRule(
-            @RequestBody Map<String, Object> rule
-    ) {
-        return Map.of(
-                "message", "Pricing rule created successfully",
-                "rule", rule
-        );
+    public PricingRule createRule(@RequestBody PricingRule rule) {
+        return service.createRule(rule);
     }
 
     @GetMapping
-    public List<Map<String, Object>> getAllRules() {
-        return List.of();
+    public List<PricingRule> getAllRules() {
+        return service.getAllRules();
     }
 
     @GetMapping("/active")
-    public List<Map<String, Object>> getActiveRules() {
-        return List.of();
+    public List<PricingRule> getActiveRules() {
+        return service.getActiveRules();
     }
 }
