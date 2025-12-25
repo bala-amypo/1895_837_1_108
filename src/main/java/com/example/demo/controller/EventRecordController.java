@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.EventRecord;
+import com.example.demo.service.EventRecordService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,36 +11,33 @@ import java.util.Map;
 @RequestMapping("/api/events")
 public class EventRecordController {
 
-    @PostMapping
-    public Map<String, Object> createEvent(
-            @RequestBody Map<String, Object> event
-    ) {
-        return Map.of(
-                "message", "Event created successfully",
-                "event", event
-        );
+    private final EventRecordService service;
+
+    public EventRecordController(EventRecordService service) {
+        this.service = service;
     }
 
-    @GetMapping
-    public List<Map<String, Object>> getAllEvents() {
-        return List.of();
+    @PostMapping
+    public EventRecord createEvent(@RequestBody EventRecord event) {
+        return service.createEvent(event);
     }
 
     @GetMapping("/{id}")
-    public Map<String, Object> getEventById(
-            @PathVariable Long id
-    ) {
-        return Map.of(
-                "eventId", id,
-                "message", "Event fetched successfully"
-        );
+    public EventRecord getEvent(@PathVariable Long id) {
+        return service.getEventById(id);
+    }
+
+    @GetMapping
+    public List<EventRecord> getAllEvents() {
+        return service.getAllEvents();
     }
 
     @PatchMapping("/{id}/status")
     public Map<String, Object> updateEventStatus(
             @PathVariable Long id,
-            @RequestParam boolean active
-    ) {
+            @RequestParam boolean active) {
+
+        service.updateEventStatus(id, active);
         return Map.of(
                 "eventId", id,
                 "active", active,
