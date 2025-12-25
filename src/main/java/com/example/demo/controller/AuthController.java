@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.JwtTokenProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -12,31 +13,53 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @PostMapping("/token")
-    public Map<String, String> generateToken(
-            @RequestParam String email,
-            @RequestParam Long userId,
-            @RequestParam String role
-    ) {
+    private final CustomUserDetailsService userService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        // Same way as in your TESTS
-        JwtTokenProvider jwtTokenProvider =
-                new JwtTokenProvider(
-                        "VerySecretKeyForJwtDemoApplication123456",
-                        3600000L,
-                        true
-                );
+    public AuthController(CustomUserDetailsService userService,
+                          JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
-        Authentication auth =
+    @PostMapping("/register")
+    public Map<String, Object> register(@RequestBody Map<String, String> req) {
+        return userService.registerUser(
+                req.get("name"),
+                req.get("email"),
+                encoder.encode(req.get("password")),
+                req.get("role")
+        );
+    }
+
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody Map<String, String> req) {
+
+        UsernamePasswordAuthenticationToken auth =
                 new UsernamePasswordAuthenticationToken(
-                        email,
-                        null,
+                        req.get("email"),
+                        req.get("password"),
                         Collections.emptyList()
                 );
 
-        String token =
-                jwtTokenProvider.generateToken(auth, userId, role);
+        Map<String, Object> user =
+                userService.registerUser(
+                        "TEMP",
+                        req.get("email"),
+                        encoder.encode(req.get("password")),
+                        "USER"
+                );
 
-        return Map.of("token", token);
+        String token = jwtTokenProvider.generateToken(
+                auth,
+                (Long) user.get("userId"),
+                (String) user.get("role")
+        );
+
+        return Map.of(
+                "token", token,
+                "email", req.get("email")
+        );
     }
 }
