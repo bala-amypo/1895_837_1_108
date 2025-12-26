@@ -1,12 +1,19 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
 public class EventRecord {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String eventCode;
+
     private String eventName;
     private String venue;
     private LocalDate eventDate;
@@ -14,12 +21,13 @@ public class EventRecord {
     private Boolean active = true;
     private LocalDateTime createdAt;
 
+    @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
         if (active == null) active = true;
     }
 
-    // getters & setters
+    // getters & setters (ALL)
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

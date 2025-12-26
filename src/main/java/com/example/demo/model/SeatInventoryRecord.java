@@ -1,18 +1,27 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
 public class SeatInventoryRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private Long eventId;
     private Integer totalSeats;
     private Integer remainingSeats;
     private LocalDateTime updatedAt;
 
+    @PreUpdate
     public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
+    // getters & setters
+    public Long getId() { return id; }
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
 
