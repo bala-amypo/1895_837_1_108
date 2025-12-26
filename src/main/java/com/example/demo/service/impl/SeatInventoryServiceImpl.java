@@ -1,32 +1,34 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.model.PricingRule;
-import com.example.demo.repository.PricingRuleRepository;
-import com.example.demo.service.PricingRuleService;
-import java.util.List;
+import com.example.demo.model.SeatInventoryRecord;
+import com.example.demo.repository.*;
+import com.example.demo.service.SeatInventoryService;
+import org.springframework.stereotype.Service;   // ✅ ADD
 
-public class PricingRuleServiceImpl implements PricingRuleService {
+@Service   // ✅ ADD
+public class SeatInventoryServiceImpl implements SeatInventoryService {
 
-    private final PricingRuleRepository repo;
+    private final SeatInventoryRecordRepository repo;
+    private final EventRecordRepository eventRepo;
 
-    public PricingRuleServiceImpl(PricingRuleRepository repo) {
-        this.repo = repo;
+    public SeatInventoryServiceImpl(
+            SeatInventoryRecordRepository r,
+            EventRecordRepository e) {
+        repo = r;
+        eventRepo = e;
     }
 
-    public PricingRule createRule(PricingRule rule) {
-        if (rule.getPriceMultiplier() == null || rule.getPriceMultiplier() <= 0)
-            throw new BadRequestException("Price multiplier must be > 0");
-        if (repo.existsByRuleCode(rule.getRuleCode()))
-            throw new BadRequestException("Rule code exists");
-        return repo.save(rule);
+    @Override
+    public SeatInventoryRecord createInventory(SeatInventoryRecord inv) {
+        eventRepo.findById(inv.getEventId()).orElseThrow();
+        if (inv.getRemainingSeats() > inv.getTotalSeats())
+            throw new BadRequestException("Remaining seats cannot exceed total seats");
+        return repo.save(inv);
     }
 
-    public List<PricingRule> getAllRules() {
-        return repo.findAll();
-    }
-
-    public List<PricingRule> getActiveRules() {
-        return repo.findByActiveTrue();
+    @Override
+    public SeatInventoryRecord getInventoryByEvent(Long eventId) {
+        return repo.findByEventId(eventId).orElseThrow();
     }
 }
