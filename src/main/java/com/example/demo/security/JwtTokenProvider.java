@@ -9,12 +9,26 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.Map;
 
-@Component   // ✅ THIS IS THE FIX
+@Component
 public class JwtTokenProvider {
 
-    private final String secret = "VerySecretKeyForJwtDemoApplication123456";
-    private final long expirationMs = 3600000L;
-    private final boolean enabled = true;
+    private final String secret;
+    private final long expirationMs;
+    private final boolean enabled;
+
+    // ✅ REQUIRED BY TEST CASES
+    public JwtTokenProvider(String secret, long expirationMs, boolean enabled) {
+        this.secret = secret;
+        this.expirationMs = expirationMs;
+        this.enabled = enabled;
+    }
+
+    // ✅ REQUIRED BY SPRING BOOT
+    public JwtTokenProvider() {
+        this.secret = "VerySecretKeyForJwtDemoApplication123456";
+        this.expirationMs = 3600000L;
+        this.enabled = true;
+    }
 
     public String generateToken(Authentication authentication,
                                 Long userId,
@@ -26,7 +40,9 @@ public class JwtTokenProvider {
                 .claim("role", role)
                 .claim("email", authentication.getName())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + expirationMs)
+                )
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
@@ -38,8 +54,8 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token);
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
             return false;
