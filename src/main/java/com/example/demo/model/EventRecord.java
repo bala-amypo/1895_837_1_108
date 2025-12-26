@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 public class EventRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
