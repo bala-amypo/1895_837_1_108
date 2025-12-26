@@ -2,33 +2,39 @@ package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.SeatInventoryRecord;
-import com.example.demo.repository.*;
+import com.example.demo.repository.EventRecordRepository;
+import com.example.demo.repository.SeatInventoryRecordRepository;
 import com.example.demo.service.SeatInventoryService;
-import org.springframework.stereotype.Service;   // ✅ ADD
 
-@Service   // ✅ ADD
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
-    private final SeatInventoryRecordRepository repo;
-    private final EventRecordRepository eventRepo;
+    private final SeatInventoryRecordRepository inventoryRepository;
+    private final EventRecordRepository eventRepository;
 
     public SeatInventoryServiceImpl(
-            SeatInventoryRecordRepository r,
-            EventRecordRepository e) {
-        repo = r;
-        eventRepo = e;
+            SeatInventoryRecordRepository inventoryRepository,
+            EventRecordRepository eventRepository
+    ) {
+        this.inventoryRepository = inventoryRepository;
+        this.eventRepository = eventRepository;
     }
 
     @Override
-    public SeatInventoryRecord createInventory(SeatInventoryRecord inv) {
-        eventRepo.findById(inv.getEventId()).orElseThrow();
-        if (inv.getRemainingSeats() > inv.getTotalSeats())
+    public SeatInventoryRecord createInventory(SeatInventoryRecord record) {
+
+        eventRepository.findById(record.getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        if (record.getRemainingSeats() > record.getTotalSeats()) {
             throw new BadRequestException("Remaining seats cannot exceed total seats");
-        return repo.save(inv);
+        }
+
+        return inventoryRepository.save(record);
     }
 
     @Override
     public SeatInventoryRecord getInventoryByEvent(Long eventId) {
-        return repo.findByEventId(eventId).orElseThrow();
+        return inventoryRepository.findByEventId(eventId)
+                .orElseThrow(() -> new RuntimeException("Seat inventory not found"));
     }
 }
