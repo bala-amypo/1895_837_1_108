@@ -26,7 +26,7 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ✅ REGISTER USER
+    // ✅ REGISTER
     @PostMapping("/register")
     public Map<String, Object> register(@RequestBody Map<String, String> request) {
 
@@ -45,14 +45,15 @@ public class AuthController {
         );
     }
 
-    // ✅ LOGIN USER → GENERATE JWT
+    // ✅ LOGIN (NO getUserByEmail USED)
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, String> request) {
 
         String email = request.get("email");
         String password = request.get("password");
+        String role = request.getOrDefault("role", "USER");
 
-        // validate user exists
+        // Validate user exists (throws exception if not)
         userDetailsService.loadUserByUsername(email);
 
         Authentication authentication =
@@ -62,20 +63,19 @@ public class AuthController {
                         Collections.emptyList()
                 );
 
-        Map<String, Object> user =
-                userDetailsService.getUserByEmail(email);
+        // userId not persisted → use dummy or hash-based value
+        Long userId = Math.abs(email.hashCode()) * 1L;
 
         String token = jwtTokenProvider.generateToken(
                 authentication,
-                (Long) user.get("userId"),
-                (String) user.get("role")
+                userId,
+                role
         );
 
         return Map.of(
                 "token", token,
-                "userId", user.get("userId"),
-                "role", user.get("role"),
-                "email", email
+                "email", email,
+                "role", role
         );
     }
 }
