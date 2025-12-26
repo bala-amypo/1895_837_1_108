@@ -6,6 +6,7 @@ import com.example.demo.repository.EventRecordRepository;
 import com.example.demo.repository.SeatInventoryRecordRepository;
 import com.example.demo.service.SeatInventoryService;
 
+@Service
 public class SeatInventoryServiceImpl implements SeatInventoryService {
 
     private final SeatInventoryRecordRepository inventoryRepository;

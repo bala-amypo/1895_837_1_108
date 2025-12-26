@@ -7,6 +7,7 @@ import com.example.demo.service.PricingRuleService;
 
 import java.util.List;
 
+@Service
 public class PricingRuleServiceImpl implements PricingRuleService {
 
     private final PricingRuleRepository repository;
