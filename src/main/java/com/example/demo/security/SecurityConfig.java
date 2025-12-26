@@ -24,16 +24,23 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
+
+                // 🔥 ALLOW CORS PREFLIGHT (THIS FIXES SWAGGER 403)
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                // open endpoints
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html"
                 ).permitAll()
+
+                // 🔒 protect everything else
                 .anyRequest().authenticated()
             )
 
+            // JWT filter
             .addFilterBefore(
                 jwtFilter,
                 UsernamePasswordAuthenticationFilter.class
