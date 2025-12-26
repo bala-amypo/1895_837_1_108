@@ -12,8 +12,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+            // ❌ Disable CSRF for APIs
             .csrf(csrf -> csrf.disable())
+
+            // 🔐 Authorization rules
             .authorizeHttpRequests(auth -> auth
+
+                // ✅ Allow Event APIs (THIS FIXES YOUR 403)
+                .requestMatchers("/api/events/**").permitAll()
+
                 // ✅ Allow Swagger
                 .requestMatchers(
                     "/v3/api-docs/**",
@@ -21,10 +28,10 @@ public class SecurityConfig {
                     "/swagger-ui.html"
                 ).permitAll()
 
-                // (optional) allow auth endpoints
+                // ✅ Allow auth endpoints (if any)
                 .requestMatchers("/auth/**").permitAll()
 
-                // 🔒 secure everything else
+                // 🔒 Secure everything else
                 .anyRequest().authenticated()
             );
 
