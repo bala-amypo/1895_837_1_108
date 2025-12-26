@@ -2,7 +2,6 @@ package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,10 +23,6 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
-
-                // 🔥 ALLOW CORS PREFLIGHT (THIS FIXES SWAGGER 403)
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
                 // open endpoints
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(
@@ -40,7 +35,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
-            // JWT filter
+            // ✅ THIS LINE IS THE KEY
             .addFilterBefore(
                 jwtFilter,
                 UsernamePasswordAuthenticationFilter.class
