@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.model.SeatInventoryRecord;
 import com.example.demo.service.SeatInventoryService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,14 +17,15 @@ public class SeatInventoryController {
     }
 
     @PostMapping
-    public SeatInventoryRecord createInventory(
-            @RequestBody SeatInventoryRecord inventory) {
-        return service.createInventory(inventory);
+    public ResponseEntity<SeatInventoryRecord> create(
+            @RequestBody SeatInventoryRecord record) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.createInventory(record));
     }
 
-    @GetMapping("/{eventId}")
-    public SeatInventoryRecord getInventory(
+    @GetMapping("/event/{eventId}")
+    public ResponseEntity<SeatInventoryRecord> getByEvent(
             @PathVariable Long eventId) {
-        return service.getInventoryByEvent(eventId);
+        return ResponseEntity.ok(service.getInventoryByEvent(eventId));
     }
 }

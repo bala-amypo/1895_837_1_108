@@ -2,12 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.model.PricingRule;
 import com.example.demo.service.PricingRuleService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/rules")
+@RequestMapping("/api/pricing-rules")
 public class PricingRuleController {
 
     private final PricingRuleService service;
@@ -17,17 +19,18 @@ public class PricingRuleController {
     }
 
     @PostMapping
-    public PricingRule createRule(@RequestBody PricingRule rule) {
-        return service.createRule(rule);
+    public ResponseEntity<PricingRule> create(@RequestBody PricingRule rule) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.createRule(rule));
     }
 
     @GetMapping
-    public List<PricingRule> getAllRules() {
-        return service.getAllRules();
+    public ResponseEntity<List<PricingRule>> getAll() {
+        return ResponseEntity.ok(service.getAllRules());
     }
 
     @GetMapping("/active")
-    public List<PricingRule> getActiveRules() {
-        return service.getActiveRules();
+    public ResponseEntity<List<PricingRule>> getActive() {
+        return ResponseEntity.ok(service.getActiveRules());
     }
 }
