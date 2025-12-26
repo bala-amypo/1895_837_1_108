@@ -17,8 +17,11 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
-                // ✅ ALLOW AUTH ENDPOINTS (THIS FIXES 403)
+                // ✅ Allow AUTH APIs
                 .requestMatchers("/auth/**").permitAll()
+
+                // ✅ Allow EVENT APIs (FIXES YOUR 403)
+                .requestMatchers("/api/events/**").permitAll()
 
                 // ✅ Allow Swagger
                 .requestMatchers(
@@ -27,7 +30,7 @@ public class SecurityConfig {
                     "/swagger-ui.html"
                 ).permitAll()
 
-                // 🔒 Everything else needs authentication
+                // 🔒 Everything else secured
                 .anyRequest().authenticated()
             );
 
