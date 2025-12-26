@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.security.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +12,14 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    // ✅ MANUAL CREATION (NO SPRING INJECTION)
+    private final JwtTokenProvider jwtTokenProvider =
+            new JwtTokenProvider(
+                    "VerySecretKeyForJwtDemoApplication123456",
+                    3600000L,
+                    true
+            );
 
-    @Autowired
-    public AuthController(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
-    // ✅ LOGIN ONLY (NO USER DETAILS SERVICE)
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, String> request) {
 
@@ -34,7 +33,6 @@ public class AuthController {
                         Collections.emptyList()
                 );
 
-        // generate deterministic userId from email
         Long userId = Math.abs(email.hashCode()) * 1L;
 
         String token = jwtTokenProvider.generateToken(
