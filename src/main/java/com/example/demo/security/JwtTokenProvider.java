@@ -31,7 +31,8 @@ public class JwtTokenProvider {
                 .claim("email", authentication.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                // ✅ MUST MATCH TESTS
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
