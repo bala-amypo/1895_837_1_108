@@ -4,6 +4,8 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DynamicPricingEngineService;
+import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDate;
 import java.util.List;

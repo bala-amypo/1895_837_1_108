@@ -5,6 +5,8 @@ import com.example.demo.model.SeatInventoryRecord;
 import com.example.demo.repository.EventRecordRepository;
 import com.example.demo.repository.SeatInventoryRecordRepository;
 import com.example.demo.service.SeatInventoryService;
+import org.springframework.stereotype.Service;
+
 
 @Service
 public class SeatInventoryServiceImpl implements SeatInventoryService {

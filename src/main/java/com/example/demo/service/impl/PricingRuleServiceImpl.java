@@ -4,6 +4,8 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.PricingRule;
 import com.example.demo.repository.PricingRuleRepository;
 import com.example.demo.service.PricingRuleService;
+import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
