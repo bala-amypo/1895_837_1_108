@@ -4,10 +4,12 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DynamicPricingEngineService;
+import org.springframework.stereotype.Service;   // ✅ ADD
 
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+@Service   // ✅ ADD
 public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineService {
 
     private final EventRecordRepository eventRepo;
@@ -29,6 +31,7 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         logRepo = l;
     }
 
+    @Override
     public DynamicPriceRecord computeDynamicPrice(Long eventId) {
         EventRecord event = eventRepo.findById(eventId).orElseThrow();
         if (!event.getActive())
@@ -42,7 +45,10 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         List<PricingRule> rules = ruleRepo.findByActiveTrue();
         List<String> applied = new ArrayList<>();
 
-        long days = ChronoUnit.DAYS.between(java.time.LocalDate.now(), event.getEventDate());
+        long days = ChronoUnit.DAYS.between(
+                java.time.LocalDate.now(),
+                event.getEventDate()
+        );
 
         for (PricingRule r : rules) {
             if (inv.getRemainingSeats() >= r.getMinRemainingSeats()
@@ -75,10 +81,12 @@ public class DynamicPricingEngineServiceImpl implements DynamicPricingEngineServ
         return priceRepo.save(rec);
     }
 
+    @Override
     public List<DynamicPriceRecord> getPriceHistory(Long eventId) {
         return priceRepo.findByEventIdOrderByComputedAtDesc(eventId);
     }
 
+    @Override
     public List<DynamicPriceRecord> getAllComputedPrices() {
         return priceRepo.findAll();
     }
